@@ -1,0 +1,46 @@
+import React from "react";
+import { AbsoluteFill, Series } from "remotion";
+import { fontFamily } from "./fonts";
+import { BrowserDemoScene } from "./scenes/BrowserDemoScene";
+import { CtaScene } from "./scenes/CtaScene";
+import { EffectFlipScene } from "./scenes/EffectFlipScene";
+import { HookScene } from "./scenes/HookScene";
+import { StatementScene } from "./scenes/StatementScene";
+import { StepsScene } from "./scenes/StepsScene";
+import { StrikeListScene } from "./scenes/StrikeListScene";
+import type { Brand, Scene, VideoScript } from "./types";
+
+// Add a new scene type: create it in scenes/, add its type to types.ts, add a case here.
+const renderScene = (scene: Scene, brand: Brand) => {
+  switch (scene.type) {
+    case "hook":
+      return <HookScene data={scene} brand={brand} />;
+    case "strike-list":
+      return <StrikeListScene data={scene} brand={brand} />;
+    case "effect-flip":
+      return <EffectFlipScene data={scene} brand={brand} />;
+    case "browser-demo":
+      return <BrowserDemoScene data={scene} brand={brand} />;
+    case "steps":
+      return <StepsScene data={scene} brand={brand} />;
+    case "statement":
+      return <StatementScene data={scene} brand={brand} />;
+    case "cta":
+      return <CtaScene data={scene} brand={brand} />;
+  }
+};
+
+export const getScriptDuration = (script: VideoScript) =>
+  script.scenes.reduce((total, scene) => total + scene.duration, 0);
+
+export const VideoFromScript: React.FC<{ script: VideoScript }> = ({ script }) => (
+  <AbsoluteFill style={{ fontFamily, background: script.brand.colors.bg }}>
+    <Series>
+      {script.scenes.map((scene, i) => (
+        <Series.Sequence key={i} durationInFrames={scene.duration} name={`${i + 1}. ${scene.type}`}>
+          {renderScene(scene, script.brand)}
+        </Series.Sequence>
+      ))}
+    </Series>
+  </AbsoluteFill>
+);
