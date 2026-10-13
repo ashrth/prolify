@@ -90,7 +90,18 @@ export type Scene =
   | StatementScene
   | CtaScene;
 
+
+
+export type SoundCue = {
+  src: string;     // path in /public
+  scene: number;   // which scene (0 = first)
+  at?: number;     // frame inside that scene
+  volume?: number; // 0–1
+};
+
 export type VideoScript = {
   brand: Brand;
   scenes: Scene[];
+  music?: { src: string; volume?: number };
+  sfx?: SoundCue[];
 };

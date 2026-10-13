@@ -1,13 +1,22 @@
 import type { VideoScript } from "../../../core/types";
 import { x657oBrand } from "../brand";
 
+
+
+
+
+
+
+
 // Asset paths are relative to /public.
 const card = (file: string) => `x657o/cards/${file}.png`; // with the effect label baked in
 const effect = (name: string, file: string) => ({ name, image: `x657o/effects/${file}.png` });
+const sfx = (name: string) => `sounds/${name}.mp3`;
 
 // 30 frames = 1 second. Total ≈ 26.7s.
 export const x657oLaunch: VideoScript = {
   brand: x657oBrand,
+  music: { src: sfx("music"), volume: 0.5 },
   scenes: [
     {
       // 0:00 — open on the payoff: the card wall from the site + the tagline
@@ -70,5 +79,14 @@ export const x657oLaunch: VideoScript = {
       button: "TRY IT FREE",
       url: "x657o.vercel.app",
     },
+  ],
+  sfx: [
+    { src: sfx("impact"), scene: 0, at: 6 },   // "ONE CLICK." slams
+    { src: sfx("impact"), scene: 0, at: 26 },  // "FINISHED POST." slams
+    ...[14, 34, 54].map((at) => ({ src: sfx("swipe"), scene: 1, at, volume: 0.7 })), // strike-throughs
+    ...[0, 1, 2, 3, 4, 5].map((i) => ({ src: sfx("tick"), scene: 2, at: i * 22, volume: 0.6 })), // effect cuts
+    { src: sfx("whoosh"), scene: 3, at: 0 },   // browser swings up
+    { src: sfx("click"), scene: 3, at: 72 },   // cursor click
+    { src: sfx("whoosh"), scene: 6, at: 0 },   // logo spin
   ],
 };

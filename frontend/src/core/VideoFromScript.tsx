@@ -1,6 +1,14 @@
 import React from "react";
-import { AbsoluteFill, Series } from "remotion";
+import {
+  AbsoluteFill,
+  interpolate,
+  Sequence,
+  Series,
+  staticFile,
+  useVideoConfig,
+} from "remotion";
 import { fontFamily } from "./fonts";
+import { Audio } from "@remotion/media";
 import { BrowserDemoScene } from "./scenes/BrowserDemoScene";
 import { CtaScene } from "./scenes/CtaScene";
 import { EffectFlipScene } from "./scenes/EffectFlipScene";
@@ -30,17 +38,62 @@ const renderScene = (scene: Scene, brand: Brand) => {
   }
 };
 
+const sceneStart = (script: VideoScript, index: number) =>
+  script.scenes.slice(0, index).reduce((t, s) => t + s.duration, 0);
+
+const Soundtrack: React.FC<{ script: VideoScript }> = ({ script }) => {
+  const { durationInFrames } = useVideoConfig();
+  const music = script.music;
+  const vol = music?.volume ?? 0.6;
+  return (
+    <>
+      {music ? (
+        <Audio
+          src={staticFile(music.src)}
+          // fade in over 0.5s, fade out over the last 1s
+          volume={(f) =>
+            interpolate(
+              f,
+              [0, 15, durationInFrames - 30, durationInFrames],
+              [0, vol, vol, 0],
+              {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp",
+              },
+            )
+          }
+        />
+      ) : null}
+      {script.sfx?.map((cue, i) => (
+        <Audio
+          key={i}
+          from={sceneStart(script, cue.scene) + (cue.at ?? 0)}
+          src={staticFile(cue.src)}
+          volume={cue.volume ?? 1}
+        />
+      ))}
+    </>
+  );
+};
+
 export const getScriptDuration = (script: VideoScript) =>
   script.scenes.reduce((total, scene) => total + scene.duration, 0);
 
-export const VideoFromScript: React.FC<{ script: VideoScript }> = ({ script }) => (
+export const VideoFromScript: React.FC<{ script: VideoScript }> = ({
+  script,
+}) => (
   <AbsoluteFill style={{ fontFamily, background: script.brand.colors.bg }}>
     <Series>
       {script.scenes.map((scene, i) => (
-        <Series.Sequence key={i} durationInFrames={scene.duration} name={`${i + 1}. ${scene.type}`}>
+        <Series.Sequence
+          key={i}
+          durationInFrames={scene.duration}
+          name={`${i + 1}. ${scene.type}`}
+        >
           {renderScene(scene, script.brand)}
         </Series.Sequence>
       ))}
     </Series>
+    <Soundtrack script={script} />
   </AbsoluteFill>
 );
