@@ -42,7 +42,7 @@ export const x657oLaunch: VideoScript = {
     {
       // 0:06 — the showreel moment: hard cuts through the effects
       type: "effect-flip",
-      duration: 168,
+      duration: 6 * FLIP + 35,
       framesPerEffect: FLIP,
       effects: [
         effect("ASCII", "ascii"),
