@@ -2,13 +2,12 @@ import React from "react";
 import {
   AbsoluteFill,
   interpolate,
-  Sequence,
   Series,
   staticFile,
   useVideoConfig,
 } from "remotion";
-import { fontFamily } from "./fonts";
 import { Audio } from "@remotion/media";
+import { fontFamily } from "./fonts";
 import { BrowserDemoScene } from "./scenes/BrowserDemoScene";
 import { CtaScene } from "./scenes/CtaScene";
 import { EffectFlipScene } from "./scenes/EffectFlipScene";
@@ -18,7 +17,6 @@ import { StepsScene } from "./scenes/StepsScene";
 import { StrikeListScene } from "./scenes/StrikeListScene";
 import type { Brand, Scene, VideoScript } from "./types";
 
-// Add a new scene type: create it in scenes/, add its type to types.ts, add a case here.
 const renderScene = (scene: Scene, brand: Brand) => {
   switch (scene.type) {
     case "hook":
@@ -38,46 +36,29 @@ const renderScene = (scene: Scene, brand: Brand) => {
   }
 };
 
-const sceneStart = (script: VideoScript, index: number) =>
-  script.scenes.slice(0, index).reduce((t, s) => t + s.duration, 0);
-
-const Soundtrack: React.FC<{ script: VideoScript }> = ({ script }) => {
-  const { durationInFrames } = useVideoConfig();
-  const music = script.music;
-  const vol = music?.volume ?? 0.6;
-  return (
-    <>
-      {music ? (
-        <Audio
-          src={staticFile(music.src)}
-          // fade in over 0.5s, fade out over the last 1s
-          volume={(f) =>
-            interpolate(
-              f,
-              [0, 15, durationInFrames - 30, durationInFrames],
-              [0, vol, vol, 0],
-              {
-                extrapolateLeft: "clamp",
-                extrapolateRight: "clamp",
-              },
-            )
-          }
-        />
-      ) : null}
-      {script.sfx?.map((cue, i) => (
-        <Audio
-          key={i}
-          from={sceneStart(script, cue.scene) + (cue.at ?? 0)}
-          src={staticFile(cue.src)}
-          volume={cue.volume ?? 1}
-        />
-      ))}
-    </>
-  );
-};
-
 export const getScriptDuration = (script: VideoScript) =>
   script.scenes.reduce((total, scene) => total + scene.duration, 0);
+
+// Background music for the whole video, with a fade in and out
+const Music: React.FC<{ src: string; volume: number }> = ({ src, volume }) => {
+  const { durationInFrames } = useVideoConfig();
+  return (
+    <Audio
+      src={staticFile(src)}
+      volume={(f) =>
+        interpolate(
+          f,
+          [0, 15, durationInFrames - 30, durationInFrames],
+          [0, volume, volume, 0],
+          {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          },
+        )
+      }
+    />
+  );
+};
 
 export const VideoFromScript: React.FC<{ script: VideoScript }> = ({
   script,
@@ -91,9 +72,20 @@ export const VideoFromScript: React.FC<{ script: VideoScript }> = ({
           name={`${i + 1}. ${scene.type}`}
         >
           {renderScene(scene, script.brand)}
+          {/* this scene's sounds; `at` counts from the start of the scene */}
+          {scene.sounds?.map((s, j) => (
+            <Audio
+              key={j}
+              from={s.at ?? 0}
+              src={staticFile(s.src)}
+              volume={s.volume ?? 1}
+            />
+          ))}
         </Series.Sequence>
       ))}
     </Series>
-    <Soundtrack script={script} />
+    {script.music ? (
+      <Music src={script.music.src} volume={script.music.volume ?? 0.6} />
+    ) : null}
   </AbsoluteFill>
 );

@@ -55,6 +55,7 @@ export const x657oLaunch: VideoScript = {
       url: "x657o.vercel.app",
       caption: ["RUNS IN YOUR BROWSER.", "NOTHING TO INSTALL."],
       click: { x: 0.352, y: 0.742, atFrame: 72 },
+      sounds: [{ src: "sounds/click.mp3", at: 72 }],
     },
     {
       // 0:16 — templates

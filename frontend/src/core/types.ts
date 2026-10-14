@@ -27,6 +27,8 @@ export type Brand = {
   };
 };
 
+export type SceneSound = { src: string; at?: number; volume?: number };
+
 export type HookScene = {
   type: "hook";
   duration: number;
@@ -81,21 +83,10 @@ export type CtaScene = {
   url: string;
 };
 
-export type Scene =
-  | HookScene
-  | StrikeListScene
-  | EffectFlipScene
-  | BrowserDemoScene
-  | StepsScene
-  | StatementScene
-  | CtaScene;
-
-
-
 export type SoundCue = {
-  src: string;     // path in /public
-  scene: number;   // which scene (0 = first)
-  at?: number;     // frame inside that scene
+  src: string; // path in /public
+  scene: number; // which scene (0 = first)
+  at?: number; // frame inside that scene
   volume?: number; // 0–1
 };
 
@@ -103,5 +94,14 @@ export type VideoScript = {
   brand: Brand;
   scenes: Scene[];
   music?: { src: string; volume?: number };
-  sfx?: SoundCue[];
 };
+
+export type Scene = (
+  | HookScene
+  | StrikeListScene
+  | EffectFlipScene
+  | BrowserDemoScene
+  | StepsScene
+  | StatementScene
+  | CtaScene
+) & { sounds?: SceneSound[] };
