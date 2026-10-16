@@ -27,8 +27,6 @@ export type Brand = {
   };
 };
 
-export type SceneSound = { src: string; at?: number; volume?: number };
-
 export type HookScene = {
   type: "hook";
   duration: number;
@@ -83,17 +81,60 @@ export type CtaScene = {
   url: string;
 };
 
-export type SoundCue = {
-  src: string; // path in /public
-  scene: number; // which scene (0 = first)
-  at?: number; // frame inside that scene
-  volume?: number; // 0–1
+export type ImageTitleScene = {
+  type: "image-title";
+  duration: number;
+  image: string; // full-bleed background
+  kicker?: string;
+  headline: string;
+  sub?: string;
 };
 
-export type VideoScript = {
-  brand: Brand;
-  scenes: Scene[];
-  music?: { src: string; volume?: number };
+export type FlashCutsScene = {
+  type: "flash-cuts";
+  duration: number; // usually items.length * framesPer
+  framesPer: number;
+  items: { image: string; label: string }[];
+};
+
+/** A slider in the settings panel. Values animate from `from` to `to` between frames `start` and `end`. */
+export type PanelSlider = {
+  label: string;
+  from: number;
+  to: number;
+  max: number;
+  suffix?: string; // "%", "°", ""
+  start?: number; // omit start/end for a slider that doesn't move
+  end?: number;
+  drives?: "amount" | "centerX" | "centerY"; // what this slider controls in the live preview
+};
+
+export type EffectDemoScene = {
+  type: "effect-demo";
+  duration: number;
+  title: string; // big label on the photo, e.g. "ZOOM"
+  panelTitle: string; // e.g. "MOTION BLUR"
+  modes: string[]; // the pill buttons
+  activeMode: number;
+  previousMode?: number; // highlighted before the click (omit = none)
+  clickAt: number; // frame the pill gets clicked
+  image: string; // sharp original
+  result: string; // the app's real output, crossfaded in at revealAt
+  aspect: number; // width / height of the photo
+  blur: {
+    kind: "linear" | "zoom" | "spin";
+    full: number; // visual size when the "amount" slider reaches its `to` value (linear: fraction of width, zoom: extra scale, spin: degrees)
+    angle?: number; // linear only, degrees
+  };
+  sliders: PanelSlider[];
+  revealAt: number;
+};
+
+export type SceneSound = {
+  src: string;
+  at?: number; // frame inside the scene
+  volume?: number;
+  duration?: number; // cut the sound off after this many frames
 };
 
 export type Scene = (
@@ -104,4 +145,13 @@ export type Scene = (
   | StepsScene
   | StatementScene
   | CtaScene
+  | ImageTitleScene
+  | FlashCutsScene
+  | EffectDemoScene
 ) & { sounds?: SceneSound[] };
+
+export type VideoScript = {
+  brand: Brand;
+  scenes: Scene[];
+  music?: { src: string; volume?: number };
+};
