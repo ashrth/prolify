@@ -4,6 +4,8 @@
 // `duration` in frames (30 frames = 1 second).
 // ─────────────────────────────────────────────────────────────
 
+import type { FontName } from "./fonts";
+
 export type EnterPreset =
   | "slam" // scales down from big + blur, snappy. Hooks, punchlines.
   | "rise" // fades up from below, smooth. Captions, supporting text.
@@ -148,7 +150,7 @@ export type Scene = (
   | ImageTitleScene
   | FlashCutsScene
   | EffectDemoScene
-) & { sounds?: SceneSound[] };
+) & { sounds?: SceneSound[]; font?: FontName };
 
 export type VideoScript = {
   brand: Brand;

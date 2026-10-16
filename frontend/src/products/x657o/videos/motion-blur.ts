@@ -14,9 +14,22 @@ const MODES = ["Linear", "Zoom", "Spin"];
 const FULL = { linear: 0.14, zoom: 0.3, spin: 22 };
 
 const strength = (start: number, end: number): PanelSlider => ({
-  label: "Strength", from: 0, to: STRENGTH, max: 100, suffix: "%", start, end, drives: "amount",
+  label: "Strength",
+  from: 0,
+  to: STRENGTH,
+  max: 100,
+  suffix: "%",
+  start,
+  end,
+  drives: "amount",
 });
-const intensity: PanelSlider = { label: "Intensity", from: INTENSITY, to: INTENSITY, max: 100, suffix: "%" };
+const intensity: PanelSlider = {
+  label: "Intensity",
+  from: INTENSITY,
+  to: INTENSITY,
+  max: 100,
+  suffix: "%",
+};
 
 // 30 frames = 1 second. Total ≈ 12.4s.
 export const x657oMotionBlur: VideoScript = {
@@ -36,8 +49,9 @@ export const x657oMotionBlur: VideoScript = {
     {
       // 0:01.5 — Linear: drag Strength, the photo smears sideways
       type: "effect-demo",
-      duration: 72,
+      duration: 55,
       title: "LINEAR",
+      font: "instrument",
       panelTitle: "MOTION BLUR",
       modes: MODES,
       activeMode: 0,
@@ -46,7 +60,11 @@ export const x657oMotionBlur: VideoScript = {
       result: `${MB}/linear.jpg`,
       aspect: 2 / 3,
       blur: { kind: "linear", full: FULL.linear, angle: 0 },
-      sliders: [strength(8, 40), intensity, { label: "Angle", from: 0, to: 0, max: 360, suffix: "°" }],
+      sliders: [
+        strength(8, 40),
+        intensity,
+        { label: "Angle", from: 0, to: 0, max: 360, suffix: "°" },
+      ],
       revealAt: 42,
       sounds: [
         { src: sfx("ui-click"), at: 2 },
@@ -54,10 +72,11 @@ export const x657oMotionBlur: VideoScript = {
       ],
     },
     {
-      // 0:03.9 — Zoom: move the center, then drag Strength
+      // Zoom: 60 frames
       type: "effect-demo",
-      duration: 84,
+      duration: 60,
       title: "ZOOM",
+      font: "instrument",
       panelTitle: "MOTION BLUR",
       modes: MODES,
       activeMode: 1,
@@ -68,23 +87,42 @@ export const x657oMotionBlur: VideoScript = {
       aspect: 2 / 3,
       blur: { kind: "zoom", full: FULL.zoom },
       sliders: [
-        strength(30, 58),
+        strength(22, 42),
         intensity,
-        { label: "Center X", from: 50, to: CENTER.x, max: 100, suffix: "%", start: 10, end: 28, drives: "centerX" },
-        { label: "Center Y", from: 50, to: CENTER.y, max: 100, suffix: "%", start: 10, end: 28, drives: "centerY" },
+        {
+          label: "Center X",
+          from: 50,
+          to: CENTER.x,
+          max: 100,
+          suffix: "%",
+          start: 6,
+          end: 20,
+          drives: "centerX",
+        },
+        {
+          label: "Center Y",
+          from: 50,
+          to: CENTER.y,
+          max: 100,
+          suffix: "%",
+          start: 6,
+          end: 20,
+          drives: "centerY",
+        },
       ],
-      revealAt: 60,
+      revealAt: 46,
       sounds: [
         { src: sfx("ui-click"), at: 4 },
-        { src: sfx("slider"), at: 10, duration: 18 },
-        { src: sfx("slider"), at: 30, duration: 28 },
+        { src: sfx("slider"), at: 6, duration: 14 },
+        { src: sfx("slider"), at: 22, duration: 20 },
       ],
     },
     {
-      // 0:06.7 — Spin: center already set, just drag Strength (faster beat)
+      // Spin: 45 frames
       type: "effect-demo",
-      duration: 66,
+      duration: 45,
       title: "SPIN",
+      font: "instrument",
       panelTitle: "MOTION BLUR",
       modes: MODES,
       activeMode: 2,
@@ -95,15 +133,29 @@ export const x657oMotionBlur: VideoScript = {
       aspect: 2 / 3,
       blur: { kind: "spin", full: FULL.spin },
       sliders: [
-        strength(8, 38),
+        strength(4, 26),
         intensity,
-        { label: "Center X", from: CENTER.x, to: CENTER.x, max: 100, suffix: "%", drives: "centerX" },
-        { label: "Center Y", from: CENTER.y, to: CENTER.y, max: 100, suffix: "%", drives: "centerY" },
+        {
+          label: "Center X",
+          from: CENTER.x,
+          to: CENTER.x,
+          max: 100,
+          suffix: "%",
+          drives: "centerX",
+        },
+        {
+          label: "Center Y",
+          from: CENTER.y,
+          to: CENTER.y,
+          max: 100,
+          suffix: "%",
+          drives: "centerY",
+        },
       ],
-      revealAt: 40,
+      revealAt: 30,
       sounds: [
         { src: sfx("click"), at: 2 },
-        { src: sfx("slider"), at: 8, duration: 30 },
+        { src: sfx("slider"), at: 4, duration: 22 },
       ],
     },
     {

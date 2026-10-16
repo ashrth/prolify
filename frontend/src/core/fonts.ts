@@ -1,8 +1,16 @@
-import { loadFont } from "@remotion/google-fonts/LeagueSpartan";
+import { loadFont as loadSpartan } from "@remotion/google-fonts/LeagueSpartan";
+import { loadFont as loadInstrument } from "@remotion/google-fonts/InstrumentSerif";
 
-// Remotion waits for the font before rendering any frame,
-// so there's never a flash of a fallback font in the video.
-export const { fontFamily } = loadFont("normal", {
-  weights: ["400", "500", "700"],
-  subsets: ["latin"],
-});
+export const fonts = {
+  spartan: loadSpartan("normal", {
+    weights: ["400", "500", "700"],
+    subsets: ["latin"],
+  }).fontFamily,
+  instrument: loadInstrument("normal", { weights: ["400"], subsets: ["latin"] })
+    .fontFamily,
+};
+
+export type FontName = keyof typeof fonts;
+
+// default font for every scene
+export const fontFamily = fonts.spartan;
