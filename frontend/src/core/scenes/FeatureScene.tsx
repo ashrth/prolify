@@ -1,15 +1,34 @@
 import React from "react";
-import { AbsoluteFill, Easing, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
+import {
+  AbsoluteFill,
+  Easing,
+  Img,
+  interpolate,
+  staticFile,
+  useCurrentFrame,
+} from "remotion";
 import { AnimatedText } from "../components/AnimatedText";
 import { Backdrop } from "../components/Backdrop";
 import { clamp, useLayout } from "../layout";
 import { enterStyle, outExpo } from "../presets";
-import type { Brand, FeatureScene as FeatureData, FeatureVisual } from "../types";
+import type {
+  Brand,
+  FeatureScene as FeatureData,
+  FeatureVisual,
+} from "../types";
 
-const cover: React.CSSProperties = { width: "100%", height: "100%", objectFit: "cover", display: "block" };
+const cover: React.CSSProperties = {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  display: "block",
+};
 
 /** Big headline on top, one visual that proves it underneath. */
-export const FeatureScene: React.FC<{ data: FeatureData; brand: Brand }> = ({ data, brand }) => {
+export const FeatureScene: React.FC<{ data: FeatureData; brand: Brand }> = ({
+  data,
+  brand,
+}) => {
   const frame = useCurrentFrame();
   const { u, fps, isVertical } = useLayout();
 
@@ -28,7 +47,13 @@ export const FeatureScene: React.FC<{ data: FeatureData; brand: Brand }> = ({ da
           text={data.headline}
           preset="mask-up"
           stagger={3}
-          style={{ fontSize: 120 * u, fontWeight: 700, lineHeight: 1, color: brand.colors.text, textAlign: "center" }}
+          style={{
+            fontSize: 120 * u,
+            fontWeight: 700,
+            lineHeight: 1,
+            color: brand.colors.text,
+            textAlign: "center",
+          }}
         />
         <div style={enterStyle("rise", frame - 2, fps, u)}>
           <Visual visual={data.visual} duration={data.duration} brand={brand} />
@@ -38,7 +63,11 @@ export const FeatureScene: React.FC<{ data: FeatureData; brand: Brand }> = ({ da
   );
 };
 
-const Frame: React.FC<{ w: number; h: number; children: React.ReactNode }> = ({ w, h, children }) => {
+const Frame: React.FC<{ w: number; h: number; children: React.ReactNode }> = ({
+  w,
+  h,
+  children,
+}) => {
   const { u } = useLayout();
   return (
     <div
@@ -66,7 +95,11 @@ const useBox = (aspect: number) => {
   return { w, h: w / aspect };
 };
 
-const Visual: React.FC<{ visual: FeatureVisual; duration: number; brand: Brand }> = ({ visual, duration, brand }) => {
+const Visual: React.FC<{
+  visual: FeatureVisual;
+  duration: number;
+  brand: Brand;
+}> = ({ visual, duration, brand }) => {
   const frame = useCurrentFrame();
   const { u } = useLayout();
   const box = useBox(visual.kind === "flip" ? 1 : visual.aspect);
@@ -78,7 +111,10 @@ const Visual: React.FC<{ visual: FeatureVisual; duration: number; brand: Brand }
       const punch = interpolate(local, [0, visual.framesPer], [1.06, 1], clamp);
       return (
         <Frame w={box.w * 0.85} h={box.w * 0.85}>
-          <Img src={staticFile(visual.images[i])} style={{ ...cover, transform: `scale(${punch})` }} />
+          <Img
+            src={staticFile(visual.images[i])}
+            style={{ ...cover, transform: `scale(${punch})` }}
+          />
         </Frame>
       );
     }
@@ -87,22 +123,45 @@ const Visual: React.FC<{ visual: FeatureVisual; duration: number; brand: Brand }
       const zoom = interpolate(frame, [0, duration], [1, 1.08], clamp);
       return (
         <Frame w={box.w} h={box.h}>
-          <Img src={staticFile(visual.image)} style={{ ...cover, transform: `scale(${zoom})` }} />
+          <Img
+            src={staticFile(visual.image)}
+            style={{ ...cover, transform: `scale(${zoom})` }}
+          />
         </Frame>
       );
     }
 
     case "watermark": {
       // start zoomed into the bottom-right corner, pull back once the watermark is gone
-      const zoom = interpolate(frame, [visual.removeAt + 4, visual.removeAt + 18], [2.4, 1], {
-        ...clamp,
-        easing: Easing.inOut(Easing.cubic),
-      });
-      const strike = interpolate(frame, [visual.strikeAt, visual.strikeAt + 6], [0, 1], { ...clamp, easing: outExpo });
-      const gone = interpolate(frame, [visual.removeAt, visual.removeAt + 8], [0, 1], clamp);
+      const zoom = interpolate(
+        frame,
+        [visual.removeAt + 4, visual.removeAt + 18],
+        [2.4, 1],
+        {
+          ...clamp,
+          easing: Easing.inOut(Easing.cubic),
+        },
+      );
+      const strike = interpolate(
+        frame,
+        [visual.strikeAt, visual.strikeAt + 6],
+        [0, 1],
+        { ...clamp, easing: outExpo },
+      );
+      const gone = interpolate(
+        frame,
+        [visual.removeAt, visual.removeAt + 8],
+        [0, 1],
+        clamp,
+      );
       return (
         <Frame w={box.w} h={box.h}>
-          <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: "90% 95%" }}>
+          <AbsoluteFill
+            style={{
+              transform: `scale(${zoom})`,
+              transformOrigin: "100% 100%",
+            }}
+          >
             <Img src={staticFile(visual.image)} style={cover} />
             {/* the watermark, drawn in code so it can be animated off */}
             <div
@@ -144,7 +203,9 @@ const Visual: React.FC<{ visual: FeatureVisual; duration: number; brand: Brand }
       const local = frame - i * visual.framesPer;
       const isLast = i === last;
       const flash = i > 0 ? interpolate(local, [0, 4], [0.25, 0], clamp) : 0;
-      const labelScale = isLast ? interpolate(local, [0, 8], [1.4, 1], { ...clamp, easing: outExpo }) : 1;
+      const labelScale = isLast
+        ? interpolate(local, [0, 8], [1.4, 1], { ...clamp, easing: outExpo })
+        : 1;
       return (
         <Frame w={box.w} h={box.h}>
           <Img src={staticFile(visual.steps[i].image)} style={cover} />

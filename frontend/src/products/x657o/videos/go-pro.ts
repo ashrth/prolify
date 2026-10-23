@@ -49,25 +49,40 @@ export const x657oGoPro: VideoScript = {
           "x657o/effects/circle.png",
         ],
       },
-      sounds: [0, 8, 16, 24].map((at) => ({ src: sfx("tick"), at, volume: 0.5 })),
+      sounds: [0, 8, 16, 24].map((at) => ({
+        src: sfx("tick"),
+        at,
+        volume: 0.5,
+      })),
     },
     {
       // 0:02.9 — all templates
       type: "feature",
       duration: 30,
       headline: "all templates",
-      visual: { kind: "image", image: "x657o/templates.png", aspect: 1146 / 1360 },
-      sounds: [{ src: sfx("whoosh"), at: 0 }],
+      visual: {
+        kind: "image",
+        image: "x657o/templates.png",
+        aspect: 1146 / 1360,
+      },
+      sounds: [{ src: sfx("game-click"), at: 0 }],
     },
     {
       // 0:03.9 — no watermark: zoomed on the watermark, crossed out, gone, pull back
       type: "feature",
-      duration: 44,
+      duration: 50,
       headline: "no watermark",
-      visual: { kind: "watermark", image: `${P}/street-clean.jpg`, aspect: 1, text: "made with x657o", strikeAt: 10, removeAt: 18 },
+      visual: {
+        kind: "watermark",
+        image: `${P}/street-clean.jpg`,
+        aspect: 1,
+        text: "made with x657o",
+        strikeAt: 16,
+        removeAt: 24,
+      },
       sounds: [
-        { src: sfx("swipe"), at: 10 },
-        { src: sfx("whoosh"), at: 20, volume: 0.7 },
+       
+        { src: sfx("whoosh"), at: 26, volume: 0.7 },
       ],
     },
     {
@@ -87,9 +102,9 @@ export const x657oGoPro: VideoScript = {
         ],
       },
       sounds: [
-        { src: sfx("tick"), at: 0 },
-        { src: sfx("tick"), at: 7 },
-        { src: sfx("tick"), at: 14 },
+        { src: sfx("casette"), at: 0 },
+        { src: sfx("casette"), at: 7 },
+        { src: sfx("casette"), at: 14 },
         { src: sfx("impact"), at: 21 },
       ],
     },
@@ -102,7 +117,12 @@ export const x657oGoPro: VideoScript = {
       plans: [
         { name: "monthly", price: "$5", suffix: "/month" },
         { name: "yearly", price: "$40", suffix: "/year", badge: "save 33%" },
-        { name: "lifetime", price: "$29", suffix: "once", badge: "early supporter" },
+        {
+          name: "lifetime",
+          price: "$29",
+          suffix: "once",
+          badge: "early supporter",
+        },
       ],
       button: "choose",
       pick: 2,
@@ -124,8 +144,8 @@ export const x657oGoPro: VideoScript = {
       button: "go pro today",
       url: "x657o.vercel.app",
       sounds: [
-        { src: sfx("whoosh"), at: 0 },
-        { src: sfx("pop"), at: 36 },
+        
+        { src: sfx("slider"), at: 36 },
       ],
     },
   ],
