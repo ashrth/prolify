@@ -27,7 +27,7 @@ export const CtaScene: React.FC<{ data: CtaData; brand: Brand }> = ({ data, bran
           }}
         />
         <AnimatedText
-          text={brand.name}
+          text={data.wordmark ?? brand.name}
           preset="blur-in"
           delay={12}
           stagger={3}

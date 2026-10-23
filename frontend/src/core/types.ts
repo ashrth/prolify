@@ -1,10 +1,10 @@
+import type { FontName } from "./fonts";
+
 // ─────────────────────────────────────────────────────────────
 // Core types. A video is just: a brand + a list of scenes.
 // Every scene has a `type` (which component renders it) and a
 // `duration` in frames (30 frames = 1 second).
 // ─────────────────────────────────────────────────────────────
-
-import type { FontName } from "./fonts";
 
 export type EnterPreset =
   | "slam" // scales down from big + blur, snappy. Hooks, punchlines.
@@ -81,6 +81,42 @@ export type CtaScene = {
   duration: number;
   button: string;
   url: string;
+  wordmark?: string; // overrides brand.name, e.g. lowercase "x657o"
+};
+
+/** Lines replace each other in quick cuts; the last one slams in bigger and holds. */
+export type SwapHookScene = {
+  type: "swap-hook";
+  duration: number;
+  framesPer: number;
+  lines: { main: string; small?: string }[];
+  sub?: string; // appears under the final line
+};
+
+export type FeatureVisual =
+  | { kind: "flip"; images: string[]; framesPer: number } // rapid card cuts
+  | { kind: "image"; image: string; aspect: number } // framed image, slow push-in
+  | { kind: "watermark"; image: string; aspect: number; text: string; strikeAt: number; removeAt: number }
+  | { kind: "steps"; framesPer: number; aspect: number; steps: { image: string; label: string }[] }; // e.g. pixelated → sharp
+
+/** Big headline on top, one visual proving it underneath. */
+export type FeatureScene = {
+  type: "feature";
+  duration: number;
+  headline: string;
+  visual: FeatureVisual;
+};
+
+export type PricingScene = {
+  type: "pricing";
+  duration: number;
+  title: string;
+  subtitle?: string;
+  plans: { name: string; price: string; suffix: string; badge?: string }[]; // price like "$29"
+  button: string;
+  pick: number; // which plan the cursor clicks
+  clickAt: number;
+  note?: string; // appears after the click
 };
 
 export type ImageTitleScene = {
@@ -150,6 +186,9 @@ export type Scene = (
   | ImageTitleScene
   | FlashCutsScene
   | EffectDemoScene
+  | SwapHookScene
+  | FeatureScene
+  | PricingScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 export type VideoScript = {

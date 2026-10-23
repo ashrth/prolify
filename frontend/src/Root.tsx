@@ -3,6 +3,7 @@ import { Composition, Folder } from "remotion";
 import { PresetGallery } from "./core/PresetGallery";
 import { getScriptDuration, VideoFromScript } from "./core/VideoFromScript";
 import { x657oLaunch } from "./products/x657o/videos/launch";
+import { x657oGoPro } from "./products/x657o/videos/go-pro";
 import { x657oMotionBlur } from "./products/x657o/videos/motion-blur";
 
 const FPS = 30;
@@ -36,6 +37,15 @@ export const RemotionRoot: React.FC = () => (
         width={1080}
         height={1920}
         defaultProps={{ script: x657oMotionBlur }}
+      />
+      <Composition
+        id="x657o-go-pro"
+        component={VideoFromScript}
+        durationInFrames={getScriptDuration(x657oGoPro)}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ script: x657oGoPro }}
       />
     </Folder>
 
