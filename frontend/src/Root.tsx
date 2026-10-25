@@ -4,6 +4,7 @@ import { PresetGallery } from "./core/PresetGallery";
 import { getScriptDuration, VideoFromScript } from "./core/VideoFromScript";
 import { x657oLaunch } from "./products/x657o/videos/launch";
 import { x657oAscii } from "./products/x657o/videos/ascii";
+import { x657oAsciiEdit } from "./products/x657o/videos/ascii-edit";
 import { x657oGoPro } from "./products/x657o/videos/go-pro";
 import { x657oMotionBlur } from "./products/x657o/videos/motion-blur";
 
@@ -56,6 +57,15 @@ export const RemotionRoot: React.FC = () => (
         width={1080}
         height={1920}
         defaultProps={{ script: x657oAscii }}
+      />
+      <Composition
+        id="x657o-ascii-edit"
+        component={VideoFromScript}
+        durationInFrames={getScriptDuration(x657oAsciiEdit)}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ script: x657oAsciiEdit }}
       />
     </Folder>
 

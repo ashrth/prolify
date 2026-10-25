@@ -156,6 +156,28 @@ export type ControlSection =
   | { kind: "swatch"; label?: string; colors: { at: number; color: string }[]; showAt?: number }
   | { kind: "slider"; slider: PanelSlider };
 
+/** One photo in a PhotoStack. It enters at frame `at` and covers part (or all) of what's under it. */
+export type StackStep = {
+  at: number;
+  image: string;
+  region?: "full" | "left" | "right" | "top" | "bottom"; // default "full"
+  enter?: "slide" | "fade"; // default: "slide" for halves, "fade" for full
+};
+
+/**
+ * Personal-edit style: aligned photos layered on top of each other,
+ * with a slow camera push, gentle sway and film grain. No text, no UI.
+ */
+export type PhotoStackScene = {
+  type: "photo-stack";
+  duration: number;
+  steps: StackStep[];
+  transition?: number; // frames each entrance takes, default 14
+  objectPosition?: string;
+  grain?: boolean;
+  fadeOut?: number; // frames of fade to black at the end
+};
+
 /** Image on top, the effect's control panel below. Images and panel change on a timeline. */
 export type EffectShowcaseScene = {
   type: "effect-showcase";
@@ -224,6 +246,7 @@ export type Scene = (
   | PricingScene
   | ScanRevealScene
   | EffectShowcaseScene
+  | PhotoStackScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 export type VideoScript = {

@@ -11,6 +11,7 @@ import { FeatureScene } from "./scenes/FeatureScene";
 import { FlashCutsScene } from "./scenes/FlashCutsScene";
 import { HookScene } from "./scenes/HookScene";
 import { ImageTitleScene } from "./scenes/ImageTitleScene";
+import { PhotoStackScene } from "./scenes/PhotoStackScene";
 import { PricingScene } from "./scenes/PricingScene";
 import { ScanRevealScene } from "./scenes/ScanRevealScene";
 import { StatementScene } from "./scenes/StatementScene";
@@ -52,6 +53,8 @@ const renderScene = (scene: Scene, brand: Brand) => {
       return <ScanRevealScene data={scene} brand={brand} />;
     case "effect-showcase":
       return <EffectShowcaseScene data={scene} brand={brand} />;
+    case "photo-stack":
+      return <PhotoStackScene data={scene} brand={brand} />;
   }
 };
 
