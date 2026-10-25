@@ -19,7 +19,7 @@ export const FlashCutsScene: React.FC<{ data: CutsData; brand: Brand }> = ({ dat
   return (
     <AbsoluteFill style={{ background: brand.colors.bg }}>
       <AbsoluteFill style={{ transform: `scale(${punch})` }}>
-        <Img src={staticFile(item.image)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        <Img src={staticFile(item.image)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: data.objectPosition ?? "50% 50%" }} />
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "rgba(0,0,0,0.25)" }} />
       <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>

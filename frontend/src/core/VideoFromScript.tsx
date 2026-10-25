@@ -6,11 +6,13 @@ import { BrowserDemoScene } from "./scenes/BrowserDemoScene";
 import { CtaScene } from "./scenes/CtaScene";
 import { EffectDemoScene } from "./scenes/EffectDemoScene";
 import { EffectFlipScene } from "./scenes/EffectFlipScene";
+import { EffectShowcaseScene } from "./scenes/EffectShowcaseScene";
 import { FeatureScene } from "./scenes/FeatureScene";
 import { FlashCutsScene } from "./scenes/FlashCutsScene";
 import { HookScene } from "./scenes/HookScene";
 import { ImageTitleScene } from "./scenes/ImageTitleScene";
 import { PricingScene } from "./scenes/PricingScene";
+import { ScanRevealScene } from "./scenes/ScanRevealScene";
 import { StatementScene } from "./scenes/StatementScene";
 import { StepsScene } from "./scenes/StepsScene";
 import { StrikeListScene } from "./scenes/StrikeListScene";
@@ -46,6 +48,10 @@ const renderScene = (scene: Scene, brand: Brand) => {
       return <FeatureScene data={scene} brand={brand} />;
     case "pricing":
       return <PricingScene data={scene} brand={brand} />;
+    case "scan-reveal":
+      return <ScanRevealScene data={scene} brand={brand} />;
+    case "effect-showcase":
+      return <EffectShowcaseScene data={scene} brand={brand} />;
   }
 };
 

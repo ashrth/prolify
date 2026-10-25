@@ -77,7 +77,7 @@ export const SettingsPanel: React.FC<Props> = ({ title, modes, activeMode, previ
       {/* sliders */}
       {sliders.map((s) => {
         const v = sliderValue(s, frame);
-        const p = v / s.max;
+        const p = (v - (s.min ?? 0)) / (s.max - (s.min ?? 0));
         const dragging = isDragging(s, frame);
         return (
           <div key={s.label} style={{ marginTop: 30 * u }}>

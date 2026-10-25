@@ -133,6 +133,38 @@ export type FlashCutsScene = {
   duration: number; // usually items.length * framesPer
   framesPer: number;
   items: { image: string; label: string }[];
+  objectPosition?: string; // which part of the image to keep when cropping, e.g. "70% 50%"
+};
+
+/** Full-bleed: a glowing line scans down, turning `before` into `after`. Headline slams in after. */
+export type ScanRevealScene = {
+  type: "scan-reveal";
+  duration: number;
+  before: string;
+  after: string;
+  scanFrom: number;
+  scanTo: number;
+  objectPosition?: string;
+  headline: string;
+  sub?: string;
+};
+
+/** One section of an effect's control panel. Things change at frame `at`. */
+export type ControlSection =
+  | { kind: "title"; text: string }
+  | { kind: "pills"; label?: string; options: string[]; columns?: number; select: { at: number; index: number }[] }
+  | { kind: "swatch"; label?: string; colors: { at: number; color: string }[]; showAt?: number }
+  | { kind: "slider"; slider: PanelSlider };
+
+/** Image on top, the effect's control panel below. Images and panel change on a timeline. */
+export type EffectShowcaseScene = {
+  type: "effect-showcase";
+  duration: number;
+  headline?: string;
+  images: { at: number; image: string }[];
+  aspect: number;
+  imageWidth?: number; // default 820
+  panel: ControlSection[];
 };
 
 /** A slider in the settings panel. Values animate from `from` to `to` between frames `start` and `end`. */
@@ -140,6 +172,7 @@ export type PanelSlider = {
   label: string;
   from: number;
   to: number;
+  min?: number; // default 0
   max: number;
   suffix?: string; // "%", "°", ""
   start?: number; // omit start/end for a slider that doesn't move
@@ -189,6 +222,8 @@ export type Scene = (
   | SwapHookScene
   | FeatureScene
   | PricingScene
+  | ScanRevealScene
+  | EffectShowcaseScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 export type VideoScript = {
