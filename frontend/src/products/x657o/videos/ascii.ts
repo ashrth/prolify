@@ -33,7 +33,7 @@ export const x657oAscii: VideoScript = {
       headline: "ascii art",
       sub: "new on x657o",
       sounds: [
-        { src: sfx("whoosh"), at: 4 },
+        { src: sfx("casette"), at: 4 },
         { src: sfx("impact"), at: 26 },
       ],
     },
@@ -60,7 +60,7 @@ export const x657oAscii: VideoScript = {
           select: [0, 1, 2, 3].map((i) => ({ at: i * CUT, index: i })),
         },
       ],
-      sounds: [1, 2, 3].map((i) => ({ src: sfx("click"), at: i * CUT })),
+      sounds: [1, 2, 3].map((i) => ({ src: sfx("ui-click"), at: i * CUT })),
     },
     {
       // 0:03.5 — color: original, single color, background + image behind
@@ -143,8 +143,8 @@ export const x657oAscii: VideoScript = {
       button: "try ascii art",
       url: "x657o.vercel.app",
       sounds: [
-        { src: sfx("whoosh"), at: 0 },
-        { src: sfx("pop"), at: 36 },
+       
+        { src: sfx("impact"), at: 36 },
       ],
     },
   ],
