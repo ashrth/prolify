@@ -161,7 +161,7 @@ export type FootageClip = {
   src: string; // path in /public
   zoom?: number; // e.g. 1.1 to hide black bars baked into the clip
   objectPosition?: string;
-  filter?: string; // CSS filter string, e.g. "contrast(1.2) saturate(1.3)"
+  filter?: string; // extra adjustment for this clip, e.g. "brightness(0.8) contrast(1.3)"
 };
 
 /** One shot in a footage edit: `frames` long, starting `at` seconds into the clip. */
@@ -207,6 +207,53 @@ export type TextBehindScene = {
   flashEvery: number;
   silhouetteAt?: number; // frame of the white silhouette flash
   cutout?: { folder: string; count: number }; // PNG frames of the person with no background
+};
+
+/** A video used by a dream edit. */
+export type DreamClip = { src: string };
+
+/** A cutout (PNG frames with no background), made with rembg from a whole clip. */
+export type DreamCutout = {
+  folder: string; // e.g. "dream/woman1-cutout"
+  fps: number; // the frame rate of the clip it was made from (from ffprobe)
+  count: number; // number of PNGs in the folder
+};
+
+/** One layer of a dream shot: a clip, a photo, or a cutout. */
+export type DreamLayer = {
+  clip?: string; // key in `clips`
+  image?: string; // path to a photo in /public
+  cutout?: string; // key in `cutouts`
+  at?: number; // seconds into the clip / cutout where this shot starts (default 0)
+  rate?: number; // playback speed: 0.5 = half-speed slow motion (default 1)
+  position?: string; // which part to keep when cropping to 9:16, e.g. "30% 50%" (default center)
+  zoom?: number; // scale up, e.g. 1.2
+  drift?: "in" | "out" | "left" | "right" | "up" | "down"; // slow camera move through the shot
+  blend?: "normal" | "screen" | "lighten" | "overlay" | "soft-light" | "multiply"; // how it mixes with layers below
+  opacity?: number;
+  appear?: { at: number; frames: number; how: "fade" | "wipe-down" | "wipe-right" | "left-half" | "right-half" }; // layer comes in mid-shot
+};
+
+export type DreamShot = {
+  frames: number;
+  layers: DreamLayer[]; // bottom to top; empty = black
+  flash?: "white" | "black" | "white-black"; // flash frames at the very start
+  echo?: boolean; // ghost trail on the top video layer
+  glow?: number; // bloom on the highlights, 0–1
+  soft?: number; // dreamy blur, px
+  shake?: number; // handheld shake strength
+  fadeIn?: number; // frames, from black
+  whiteOut?: number; // last N frames wash out to white
+};
+
+/** A dreamy edit: layered, blended shots with flashes, ghosting and glow. */
+export type DreamScene = {
+  type: "dream";
+  duration: number;
+  clips: Record<string, DreamClip>;
+  cutouts?: Record<string, DreamCutout>;
+  shots: DreamShot[];
+  mono?: boolean; // true = black and white
 };
 
 /** One photo in a PhotoStack. It enters at frame `at` and covers part (or all) of what's under it. */
@@ -302,6 +349,7 @@ export type Scene = (
   | PhotoStackScene
   | FootageCutsScene
   | TextBehindScene
+  | DreamScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 export type VideoScript = {

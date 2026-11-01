@@ -4,6 +4,7 @@ import { Audio } from "@remotion/media";
 import { fontFamily, fonts } from "./fonts";
 import { BrowserDemoScene } from "./scenes/BrowserDemoScene";
 import { CtaScene } from "./scenes/CtaScene";
+import { DreamScene } from "./scenes/DreamScene";
 import { EffectDemoScene } from "./scenes/EffectDemoScene";
 import { EffectFlipScene } from "./scenes/EffectFlipScene";
 import { EffectShowcaseScene } from "./scenes/EffectShowcaseScene";
@@ -61,6 +62,8 @@ const renderScene = (scene: Scene, brand: Brand) => {
       return <FootageCutsScene data={scene} />;
     case "text-behind":
       return <TextBehindScene data={scene} />;
+    case "dream":
+      return <DreamScene data={scene} />;
   }
 };
 
