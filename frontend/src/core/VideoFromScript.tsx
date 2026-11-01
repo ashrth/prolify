@@ -9,6 +9,7 @@ import { EffectFlipScene } from "./scenes/EffectFlipScene";
 import { EffectShowcaseScene } from "./scenes/EffectShowcaseScene";
 import { FeatureScene } from "./scenes/FeatureScene";
 import { FlashCutsScene } from "./scenes/FlashCutsScene";
+import { FootageCutsScene } from "./scenes/FootageCutsScene";
 import { HookScene } from "./scenes/HookScene";
 import { ImageTitleScene } from "./scenes/ImageTitleScene";
 import { PhotoStackScene } from "./scenes/PhotoStackScene";
@@ -18,6 +19,7 @@ import { StatementScene } from "./scenes/StatementScene";
 import { StepsScene } from "./scenes/StepsScene";
 import { StrikeListScene } from "./scenes/StrikeListScene";
 import { SwapHookScene } from "./scenes/SwapHookScene";
+import { TextBehindScene } from "./scenes/TextBehindScene";
 import type { Brand, Scene, VideoScript } from "./types";
 
 // Add a new scene type: create it in scenes/, add its type to types.ts, add a case here.
@@ -55,6 +57,10 @@ const renderScene = (scene: Scene, brand: Brand) => {
       return <EffectShowcaseScene data={scene} brand={brand} />;
     case "photo-stack":
       return <PhotoStackScene data={scene} brand={brand} />;
+    case "footage-cuts":
+      return <FootageCutsScene data={scene} />;
+    case "text-behind":
+      return <TextBehindScene data={scene} />;
   }
 };
 
@@ -62,8 +68,9 @@ export const getScriptDuration = (script: VideoScript) =>
   script.scenes.reduce((total, scene) => total + scene.duration, 0);
 
 // Background music for the whole video, with a fade in and out
-const Music: React.FC<{ src: string; volume: number }> = ({ src, volume }) => {
+const Music: React.FC<{ src: string; volume: number; fade: boolean }> = ({ src, volume, fade }) => {
   const { durationInFrames } = useVideoConfig();
+  if (!fade) return <Audio src={staticFile(src)} volume={volume} />;
   return (
     <Audio
       src={staticFile(src)}
@@ -98,6 +105,6 @@ export const VideoFromScript: React.FC<{ script: VideoScript }> = ({ script }) =
         </Series.Sequence>
       ))}
     </Series>
-    {script.music ? <Music src={script.music.src} volume={script.music.volume ?? 0.6} /> : null}
+    {script.music ? <Music src={script.music.src} volume={script.music.volume ?? 0.6} fade={script.music.fade ?? true} /> : null}
   </AbsoluteFill>
 );

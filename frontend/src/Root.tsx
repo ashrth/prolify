@@ -3,6 +3,7 @@ import { Composition, Folder } from "remotion";
 import { PresetGallery } from "./core/PresetGallery";
 import { getScriptDuration, VideoFromScript } from "./core/VideoFromScript";
 import { x657oLaunch } from "./products/x657o/videos/launch";
+import { gymEdit } from "./products/gym/edit";
 import { x657oAscii } from "./products/x657o/videos/ascii";
 import { x657oAsciiEdit } from "./products/x657o/videos/ascii-edit";
 import { x657oGoPro } from "./products/x657o/videos/go-pro";
@@ -66,6 +67,18 @@ export const RemotionRoot: React.FC = () => (
         width={1080}
         height={1920}
         defaultProps={{ script: x657oAsciiEdit }}
+      />
+    </Folder>
+
+    <Folder name="gym">
+      <Composition
+        id="gym-edit"
+        component={VideoFromScript}
+        durationInFrames={getScriptDuration(gymEdit)}
+        fps={FPS}
+        width={1920}
+        height={1080}
+        defaultProps={{ script: gymEdit }}
       />
     </Folder>
 

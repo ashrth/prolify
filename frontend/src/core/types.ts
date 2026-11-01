@@ -156,6 +156,59 @@ export type ControlSection =
   | { kind: "swatch"; label?: string; colors: { at: number; color: string }[]; showAt?: number }
   | { kind: "slider"; slider: PanelSlider };
 
+/** A source video file used by footage scenes. */
+export type FootageClip = {
+  src: string; // path in /public
+  zoom?: number; // e.g. 1.1 to hide black bars baked into the clip
+  objectPosition?: string;
+  filter?: string; // CSS filter string, e.g. "contrast(1.2) saturate(1.3)"
+};
+
+/** One shot in a footage edit: `frames` long, starting `at` seconds into the clip. */
+export type Shot = {
+  clip: string; // key in `clips`
+  at: number;
+  frames: number;
+  enter?: "cut" | "slices" | "shrink" | "letterbox" | "diagonal"; // how it comes in (default: hard cut)
+  split?: { clip: string; at: number }; // second clip for enter: "diagonal"
+  punch?: boolean; // zooms in hard on the first frames, for big hits
+  push?: boolean; // slow zoom through the shot
+  whip?: boolean; // whips in from the side with blur
+  white?: [number, number]; // frames (inside the shot) shown as a white high-contrast flash
+  glitch?: [number, number]; // frames of strobe + streak glitch
+  blurOut?: number; // last N frames blur and fade to black
+};
+
+export type FootageCutsScene = {
+  type: "footage-cuts";
+  duration: number;
+  clips: Record<string, FootageClip>;
+  shots: Shot[];
+};
+
+/** A clip with big text behind the person, inside a band that opens up and flashes other clips. */
+export type TextBehindScene = {
+  type: "text-behind";
+  duration: number;
+  clips: Record<string, FootageClip>;
+  base: { clip: string; at: number; scale?: number; shiftX?: number }; // shiftX: % of width, moves the person sideways (applied to the cutout too)
+  text: string;
+  color: string;
+  band: {
+    centerY: number; // 0–1, vertical position of the band
+    openAt: number; // frame the band starts opening
+    heights: [number, number]; // band height after opening, and after growing (px at 1080p)
+    growAt: number; // frame it starts growing to the second height
+    hideAt: number; // frame the band and text disappear
+  };
+  textSize: number; // px at 1080p
+  flashes: { clip: string; at: number }[]; // clips flashing inside the band
+  flashFrom: number;
+  flashEvery: number;
+  silhouetteAt?: number; // frame of the white silhouette flash
+  cutout?: { folder: string; count: number }; // PNG frames of the person with no background
+};
+
 /** One photo in a PhotoStack. It enters at frame `at` and covers part (or all) of what's under it. */
 export type StackStep = {
   at: number;
@@ -247,10 +300,12 @@ export type Scene = (
   | ScanRevealScene
   | EffectShowcaseScene
   | PhotoStackScene
+  | FootageCutsScene
+  | TextBehindScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 export type VideoScript = {
   brand: Brand;
   scenes: Scene[];
-  music?: { src: string; volume?: number };
+  music?: { src: string; volume?: number; fade?: boolean }; // fade: soft start and end (default true)
 };
