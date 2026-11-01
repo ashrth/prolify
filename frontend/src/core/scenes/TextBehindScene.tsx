@@ -7,6 +7,7 @@ import {
   prefetch,
   Sequence,
   staticFile,
+  getRemotionEnvironment,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
@@ -35,7 +36,7 @@ export const TextBehindScene: React.FC<{ data: TextBehindData }> = ({
 
   // load every cutout frame up front, so the preview doesn't stall fetching one per frame
   useEffect(() => {
-    if (!data.cutout) return;
+    if (!data.cutout || getRemotionEnvironment().isRendering) return; // preview only
     const { folder, count } = data.cutout;
     const loads = Array.from({ length: count }, (_, i) =>
       prefetch(staticFile(`${folder}/${String(i + 1).padStart(4, "0")}.png`)),
