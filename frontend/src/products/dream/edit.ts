@@ -51,8 +51,9 @@ const HER = {
   walksAway: 12.0, // walking away from the camera
   legUp: 15.0, // the fit-check pose
   showFront: 9.0, // showing the front of her outfit
-  showClose: 17.0, // showing the close-up of her outfit
+  showClose: 17.5, // showing the close-up of her outfit
   hairFlip: 6.8, // flipping her hair
+  afterHairFlip: 8.0, // after the hair flip, looking at herself
 };
 const her = (layer: DreamLayer): DreamLayer[] => (HAS_WOMAN ? [layer] : []);
 
@@ -124,7 +125,7 @@ const shots: DreamShot[] = [
     layers: [
       { clip: "mtnNode", at: 2.0, drift: "in" },
       ...(HAS_WOMAN
-        ? [{ cutout: "woman2", at: HER.singing2, opacity: 0.85 }]
+        ? [{ cutout: "woman1", at: HER.hairFlip, rate: 0.5, opacity: 0.85 }]
         : [
             {
               image: photo.sunsetClouds,
@@ -143,7 +144,7 @@ const shots: DreamShot[] = [
     layers: [
       { clip: "mtn", at: 3.4, drift: "in" },
       ...(HAS_WOMAN
-        ? [{ cutout: "woman1", at: HER.hairFlip, rate: 0.5, opacity: 0.85 }]
+        ? [{ cutout: "woman1", at: HER.afterHairFlip, opacity: 0.85 }]
         : [
             {
               image: photo.sunsetClouds,
@@ -184,7 +185,7 @@ const shots: DreamShot[] = [
 
   // 7. Close on her singing, slowed down, clouds drifting through her
   {
-    frames: 60,
+    frames: 30,
     flash: "white",
     echo: true,
     soft: 1.5,
@@ -192,7 +193,6 @@ const shots: DreamShot[] = [
     layers: HAS_WOMAN
       ? [
           { clip: "clouds", at: 2.0, rate: 0.6, drift: "in" },
-
           { cutout: "woman2", at: HER.showFront, rate: 0.8 },
           {
             image: photo.sunsetClouds,
@@ -202,7 +202,24 @@ const shots: DreamShot[] = [
           },
         ]
       : [{ clip: "car", at: 4.2, rate: 0.25, drift: "in" }],
-    ...her({ cutout: "woman2", at: HER.showFront, rate: 0.8 }),
+  },
+  {
+    frames: 30,
+    echo: true,
+    soft: 1.5,
+    glow: 0.35,
+    layers: HAS_WOMAN
+      ? [
+          { clip: "clouds", at: 2.6, rate: 0.6, drift: "in" },
+
+          {
+            image: photo.sunsetClouds,
+            blend: "screen",
+            opacity: 0.35,
+            drift: "down",
+          },
+        ]
+      : [{ clip: "car", at: 4.45, rate: 0.25, drift: "in" }],
   },
 
   // 8. Night drive in slow motion, lights blooming
