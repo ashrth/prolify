@@ -140,7 +140,10 @@ const Backdrop: React.FC<{ b: DialogueBackdrop; data: DialogueData }> = ({
     whip = ` translateX(${p * 22}%)`;
     blur = p * 30;
   }
-  const grade = THEME[data.theme];
+  // on the punch ("KILL"), switch from the theme's look to the blood-red grade
+  const punchFrame = b.punchAt !== undefined ? b.punchAt - b.from : -1;
+  const punched = punchFrame >= 0 && f >= punchFrame;
+  const grade = punched ? RED : THEME[data.theme];
   return (
     <AbsoluteFill style={{ overflow: "hidden", opacity: b.opacity ?? 1 }}>
       <AbsoluteFill
@@ -159,6 +162,15 @@ const Backdrop: React.FC<{ b: DialogueBackdrop; data: DialogueData }> = ({
         />
       </AbsoluteFill>
       <AbsoluteFill style={{ background: "rgba(0,0,0,0.35)" }} />
+      {punched ? (
+        <AbsoluteFill
+          style={{
+            background: "#B0000E",
+            mixBlendMode: "screen",
+            opacity: interpolate(f - punchFrame, [0, 6], [0.6, 0.15], clamp),
+          }}
+        />
+      ) : null}
     </AbsoluteFill>
   );
 };
@@ -266,7 +278,7 @@ const Line: React.FC<{ line: DialogueLine; color: string }> = ({
       <div
         style={{
           fontFamily: fonts.anton,
-          fontSize: (big ? 200 : 66) * u,
+          fontSize: (big ? 380 : 170) * u,
           lineHeight: 1.1,
           textAlign: "center",
           color,

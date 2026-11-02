@@ -17,6 +17,7 @@ const clips: Record<string, FootageClip> = {
   squats: { src: "aot/sqauts.mov" },
   step: { src: "aot/step-ups.mov" },
   bulg: { src: "aot/bulgarians.mp4" },
+  walking: { src: "aot/walking.mp4" },
 };
 
 // ─── The dialogue: [start frame, end frame, text] ───────────
@@ -61,7 +62,7 @@ const shots: DialogueShot[] = [
   },
   { clip: "bulg", at: 4.0, frames: 12, whip: true },
   { clip: "squats", at: 5.0, frames: 6 },
-  { clip: "sumo", at: 4.0, frames: 6 },
+  { clip: "sumo", at: 5.0, frames: 6 },
   { clip: "rotate", at: 1.4, frames: 12, whip: true },
   { clip: "sumo", at: 5.8, frames: 12 },
   {
@@ -107,17 +108,17 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "step",
           at: 1.0,
           rate: 0.5,
-          opacity: 0.3,
+          opacity: 0.15,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "Sorry… to tug on."
         {
           from: 118,
           to: 198,
-          clip: "hip",
+          clip: "walking",
           at: 3.0,
           rate: 0.5,
-          opacity: 0.3,
+          opacity: 0.15,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "You want compassion? Move on."
@@ -127,7 +128,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "bulg",
           at: 2.0,
           rate: 0.5,
-          opacity: 0.3,
+          opacity: 0.15,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "You want fair? Tough shit."
@@ -137,7 +138,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "squats",
           at: 2.0,
           rate: 0.5,
-          opacity: 0.3,
+          opacity: 0.15,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "Time's wasted… Christa."
@@ -147,7 +148,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "rotate",
           at: 0.3,
           rate: 0.4,
-          opacity: 0.3,
+          opacity: 0.15,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "Eren..."
@@ -156,7 +157,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           from: 432,
           to: CUTS_FROM,
           clip: "sitting",
-          at: 1.5,
+          at: 4.0,
           position: "75% 50%", // keeps her centered when cropping to vertical
           zoom: [1.1, 1.7],
           origin: "67% 38%", // her head
