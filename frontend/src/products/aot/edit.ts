@@ -108,7 +108,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "step",
           at: 1.0,
           rate: 0.5,
-          opacity: 0.15,
+          opacity: 0.1,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "Sorry… to tug on."
@@ -118,7 +118,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "walking",
           at: 3.0,
           rate: 0.5,
-          opacity: 0.15,
+          opacity: 0.1,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "You want compassion? Move on."
@@ -128,7 +128,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "bulg",
           at: 2.0,
           rate: 0.5,
-          opacity: 0.15,
+          opacity: 0.1,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "You want fair? Tough shit."
@@ -138,7 +138,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "squats",
           at: 2.0,
           rate: 0.5,
-          opacity: 0.15,
+          opacity: 0.1,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "Time's wasted… Christa."
@@ -148,7 +148,7 @@ const make = (theme: "bw" | "color"): VideoScript => ({
           clip: "rotate",
           at: 0.3,
           rate: 0.4,
-          opacity: 0.15,
+          opacity: 0.1,
           blur: 2,
           zoom: [1.05, 1.15],
         }, // "Eren..."
