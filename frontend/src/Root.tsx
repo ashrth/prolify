@@ -3,6 +3,7 @@ import { Composition, Folder } from "remotion";
 import { PresetGallery } from "./core/PresetGallery";
 import { getScriptDuration, VideoFromScript } from "./core/VideoFromScript";
 import { x657oLaunch } from "./products/x657o/videos/launch";
+import { aotBW, aotColor } from "./products/aot/edit";
 import { dreamEdit } from "./products/dream/edit";
 import { gymEdit } from "./products/gym/edit";
 import { x657oAscii } from "./products/x657o/videos/ascii";
@@ -92,6 +93,27 @@ export const RemotionRoot: React.FC = () => (
         width={1080}
         height={1920}
         defaultProps={{ script: dreamEdit }}
+      />
+    </Folder>
+
+    <Folder name="aot">
+      <Composition
+        id="aot-bw"
+        component={VideoFromScript}
+        durationInFrames={getScriptDuration(aotBW)}
+        fps={FPS}
+        width={1920}
+        height={1080}
+        defaultProps={{ script: aotBW }}
+      />
+      <Composition
+        id="aot-color"
+        component={VideoFromScript}
+        durationInFrames={getScriptDuration(aotColor)}
+        fps={FPS}
+        width={1920}
+        height={1080}
+        defaultProps={{ script: aotColor }}
       />
     </Folder>
 

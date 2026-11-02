@@ -209,6 +209,48 @@ export type TextBehindScene = {
   cutout?: { folder: string; count: number }; // PNG frames of the person with no background
 };
 
+/** A line of dialogue on screen from frame `at` until frame `until`. */
+export type DialogueLine = { at: number; until: number; text: string; big?: boolean };
+
+/** A clip shown full screen behind the dialogue, pushing in. */
+export type DialogueBackdrop = {
+  from: number; // scene frame it appears
+  to: number; // scene frame it ends
+  clip: string;
+  at: number; // seconds into the clip
+  position?: string; // which part to keep when cropping to 9:16
+  zoom?: [number, number]; // scale at start and end, e.g. [1.2, 2.2]
+  origin?: string; // the point it zooms toward, e.g. "70% 40%"
+  punchAt?: number; // scene frame of a hard zoom punch + shake (for the big word)
+  whipOut?: number; // last N frames blur out sideways into the cuts
+};
+
+/** One shot in the fast cuts. */
+export type DialogueShot = {
+  clip: string;
+  at: number;
+  frames: number;
+  rate?: number;
+  fill?: "blur" | "cover"; // blur = whole 16:9 frame in the middle, blurred copy behind (like the reference); cover = full screen
+  position?: string;
+  red?: boolean; // blood-red grade, in either theme
+  whip?: boolean; // enters with a sideways motion blur
+  punch?: boolean; // zooms in hard on the first frames
+};
+
+/** Dialogue on black, a clip behind the final words, then fast cuts on the drop. */
+export type DialogueScene = {
+  type: "dialogue";
+  duration: number;
+  theme: "bw" | "color";
+  textColor: string;
+  clips: Record<string, FootageClip>;
+  lines: DialogueLine[];
+  backdrops: DialogueBackdrop[];
+  cutsFrom: number; // scene frame the fast cuts start
+  shots: DialogueShot[];
+};
+
 /** A video used by a dream edit. */
 export type DreamClip = { src: string };
 
@@ -350,6 +392,7 @@ export type Scene = (
   | FootageCutsScene
   | TextBehindScene
   | DreamScene
+  | DialogueScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 export type VideoScript = {
