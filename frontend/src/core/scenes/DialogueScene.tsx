@@ -25,7 +25,7 @@ const out = Easing.bezier(0.16, 1, 0.3, 1);
 
 // The two looks. Text is never graded, so it stays blood red in both.
 const THEME = {
-  bw: "grayscale(1) contrast(1.35) brightness(0.95)",
+  bw: "grayscale(1) contrast(1.5) brightness(0.62)",
   color: "saturate(1.7) contrast(1.15) brightness(1.02)", // boosts every color: whites, blues, greens, yellows, reds
 };
 // Blood-red grade for `red: true` shots, in either theme
@@ -61,6 +61,12 @@ export const DialogueScene: React.FC<{ data: DialogueData }> = ({ data }) => {
         </Sequence>
       ))}
       <FilmLook />
+      <AbsoluteFill
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.75) 100%)",
+        }}
+      />
       {data.lines.map((l, i) => (
         <Sequence
           key={`t${i}`}
@@ -136,18 +142,19 @@ const Backdrop: React.FC<{ b: DialogueBackdrop; data: DialogueData }> = ({
   }
   const grade = THEME[data.theme];
   return (
-    <AbsoluteFill style={{ overflow: "hidden" }}>
+    <AbsoluteFill style={{ overflow: "hidden", opacity: b.opacity ?? 1 }}>
       <AbsoluteFill
         style={{
           transform: `scale(${scale})${shake}${whip}`,
           transformOrigin: b.origin ?? "50% 40%",
-          filter: `${grade} blur(${blur}px)`,
+          filter: `${grade} blur(${blur + (b.blur ?? 0)}px)`,
         }}
       >
         <Clip
           clips={data.clips}
           clip={b.clip}
           at={b.at}
+          rate={b.rate}
           style={{ objectPosition: b.position ?? "50% 50%" }}
         />
       </AbsoluteFill>

@@ -96,8 +96,20 @@ export type SwapHookScene = {
 export type FeatureVisual =
   | { kind: "flip"; images: string[]; framesPer: number } // rapid card cuts
   | { kind: "image"; image: string; aspect: number } // framed image, slow push-in
-  | { kind: "watermark"; image: string; aspect: number; text: string; strikeAt: number; removeAt: number }
-  | { kind: "steps"; framesPer: number; aspect: number; steps: { image: string; label: string }[] }; // e.g. pixelated → sharp
+  | {
+      kind: "watermark";
+      image: string;
+      aspect: number;
+      text: string;
+      strikeAt: number;
+      removeAt: number;
+    }
+  | {
+      kind: "steps";
+      framesPer: number;
+      aspect: number;
+      steps: { image: string; label: string }[];
+    }; // e.g. pixelated → sharp
 
 /** Big headline on top, one visual proving it underneath. */
 export type FeatureScene = {
@@ -152,8 +164,19 @@ export type ScanRevealScene = {
 /** One section of an effect's control panel. Things change at frame `at`. */
 export type ControlSection =
   | { kind: "title"; text: string }
-  | { kind: "pills"; label?: string; options: string[]; columns?: number; select: { at: number; index: number }[] }
-  | { kind: "swatch"; label?: string; colors: { at: number; color: string }[]; showAt?: number }
+  | {
+      kind: "pills";
+      label?: string;
+      options: string[];
+      columns?: number;
+      select: { at: number; index: number }[];
+    }
+  | {
+      kind: "swatch";
+      label?: string;
+      colors: { at: number; color: string }[];
+      showAt?: number;
+    }
   | { kind: "slider"; slider: PanelSlider };
 
 /** A source video file used by footage scenes. */
@@ -210,7 +233,12 @@ export type TextBehindScene = {
 };
 
 /** A line of dialogue on screen from frame `at` until frame `until`. */
-export type DialogueLine = { at: number; until: number; text: string; big?: boolean };
+export type DialogueLine = {
+  at: number;
+  until: number;
+  text: string;
+  big?: boolean;
+};
 
 /** A clip shown full screen behind the dialogue, pushing in. */
 export type DialogueBackdrop = {
@@ -223,6 +251,9 @@ export type DialogueBackdrop = {
   origin?: string; // the point it zooms toward, e.g. "70% 40%"
   punchAt?: number; // scene frame of a hard zoom punch + shake (for the big word)
   whipOut?: number; // last N frames blur out sideways into the cuts
+  opacity?: number; // 0–1, e.g. 0.3 for a faint background
+  blur?: number; // px, softens it so the text stays the focus
+  rate?: number; // playback speed, e.g. 0.5 for slow motion
 };
 
 /** One shot in the fast cuts. */
@@ -271,9 +302,19 @@ export type DreamLayer = {
   position?: string; // which part to keep when cropping to 9:16, e.g. "30% 50%" (default center)
   zoom?: number; // scale up, e.g. 1.2
   drift?: "in" | "out" | "left" | "right" | "up" | "down"; // slow camera move through the shot
-  blend?: "normal" | "screen" | "lighten" | "overlay" | "soft-light" | "multiply"; // how it mixes with layers below
+  blend?:
+    | "normal"
+    | "screen"
+    | "lighten"
+    | "overlay"
+    | "soft-light"
+    | "multiply"; // how it mixes with layers below
   opacity?: number;
-  appear?: { at: number; frames: number; how: "fade" | "wipe-down" | "wipe-right" | "left-half" | "right-half" }; // layer comes in mid-shot
+  appear?: {
+    at: number;
+    frames: number;
+    how: "fade" | "wipe-down" | "wipe-right" | "left-half" | "right-half";
+  }; // layer comes in mid-shot
 };
 
 export type DreamShot = {

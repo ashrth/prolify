@@ -10,7 +10,7 @@ import type {
 
 const clips: Record<string, FootageClip> = {
   sitting: { src: "aot/sitting.mp4" },
-  self: { src: "aot/self.mp4" }, // the rotated copy (see setup)
+  self: { src: "aot/self-fixed.mov" },
   rotate: { src: "aot/rotate.mp4" },
   hip: { src: "aot/hip_thrust.mov" },
   sumo: { src: "aot/sumo_squats.mov" },
@@ -45,9 +45,10 @@ const lines: DialogueLine[] = [
 const CUTS_FROM = 478;
 const shots: DialogueShot[] = [
   { clip: "rotate", at: 0.5, frames: 12, whip: true },
-  { clip: "squats", at: 4.0, frames: 18, punch: true },
-  { clip: "sumo", at: 1.8, frames: 12 },
   { clip: "hip", at: 5.0, frames: 18, punch: true },
+  { clip: "squats", at: 10.0, frames: 18, punch: true },
+  { clip: "sumo", at: 2.8, frames: 12 },
+  { clip: "hip", at: 7.0, frames: 18, punch: true },
   { clip: "step", at: 3.0, frames: 12 },
   {
     clip: "self",
@@ -58,11 +59,11 @@ const shots: DialogueShot[] = [
     position: "55% 50%",
     punch: true,
   },
-  { clip: "bulg", at: 4.5, frames: 12, whip: true },
-  { clip: "squats", at: 9.0, frames: 6 },
+  { clip: "bulg", at: 4.0, frames: 12, whip: true },
+  { clip: "squats", at: 5.0, frames: 6 },
   { clip: "sumo", at: 4.0, frames: 6 },
   { clip: "rotate", at: 1.4, frames: 12, whip: true },
-  { clip: "bulg", at: 8.0, frames: 18, punch: true },
+  { clip: "sumo", at: 5.8, frames: 12 },
   {
     clip: "self",
     at: 2.5,
@@ -100,6 +101,56 @@ const make = (theme: "bw" | "color"): VideoScript => ({
       clips,
       lines,
       backdrops: [
+        {
+          from: 0,
+          to: 118,
+          clip: "step",
+          at: 1.0,
+          rate: 0.5,
+          opacity: 0.3,
+          blur: 2,
+          zoom: [1.05, 1.15],
+        }, // "Sorry… to tug on."
+        {
+          from: 118,
+          to: 198,
+          clip: "hip",
+          at: 3.0,
+          rate: 0.5,
+          opacity: 0.3,
+          blur: 2,
+          zoom: [1.05, 1.15],
+        }, // "You want compassion? Move on."
+        {
+          from: 198,
+          to: 280,
+          clip: "bulg",
+          at: 2.0,
+          rate: 0.5,
+          opacity: 0.3,
+          blur: 2,
+          zoom: [1.05, 1.15],
+        }, // "You want fair? Tough shit."
+        {
+          from: 280,
+          to: 396,
+          clip: "squats",
+          at: 2.0,
+          rate: 0.5,
+          opacity: 0.3,
+          blur: 2,
+          zoom: [1.05, 1.15],
+        }, // "Time's wasted… Christa."
+        {
+          from: 396,
+          to: 432,
+          clip: "rotate",
+          at: 0.3,
+          rate: 0.4,
+          opacity: 0.3,
+          blur: 2,
+          zoom: [1.05, 1.15],
+        }, // "Eren..."
         {
           // "or the bitch I'm gonna KILL": push in on her bowed head, punch on KILL, whip into the cuts
           from: 432,
