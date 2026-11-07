@@ -64,10 +64,10 @@ export const gymEdit: VideoScript = {
   music: { src: "sounds/cowbell.mp3", volume: 1, fade: false },
   caption: {
     text: "if not now, then when? \nif not you, then who?",
-    font: "anton",
+    font: "montserrat",
     uppercase: true,
     position: "center",
-    size: 64,
+    size: 34,
   },
   scenes: [
     // {
