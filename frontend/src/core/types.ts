@@ -436,8 +436,23 @@ export type Scene = (
   | DialogueScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
+/** A line of text that stays on screen over the whole video (or a part of it). */
+export type Caption = {
+  text: string;
+  position?: "bottom" | "center" | "top"; // default "bottom"
+  size?: number; // px at 1080p, default 64
+  color?: string; // default white
+  font?: FontName; // default: the video's font
+  uppercase?: boolean;
+  from?: number; // frame it appears (default 0)
+  until?: number; // frame it disappears (default: the end of the video)
+  fade?: number; // frames to fade in and out (default 12)
+};
+
 export type VideoScript = {
   brand: Brand;
   scenes: Scene[];
   music?: { src: string; volume?: number; fade?: boolean }; // fade: soft start and end (default true)
+  caption?: Caption; // optional caption that appears over the whole video
 };
+

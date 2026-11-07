@@ -1,5 +1,11 @@
 import React from "react";
-import { AbsoluteFill, interpolate, Series, staticFile, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  interpolate,
+  Series,
+  staticFile,
+  useVideoConfig,
+} from "remotion";
 import { Audio } from "@remotion/media";
 import { fontFamily, fonts } from "./fonts";
 import { BrowserDemoScene } from "./scenes/BrowserDemoScene";
@@ -23,6 +29,7 @@ import { StrikeListScene } from "./scenes/StrikeListScene";
 import { SwapHookScene } from "./scenes/SwapHookScene";
 import { TextBehindScene } from "./scenes/TextBehindScene";
 import type { Brand, Scene, VideoScript } from "./types";
+import { CaptionOverlay } from "./components/CaptionOverlay";
 
 // Add a new scene type: create it in scenes/, add its type to types.ts, add a case here.
 const renderScene = (scene: Scene, brand: Brand) => {
@@ -74,28 +81,45 @@ export const getScriptDuration = (script: VideoScript) =>
   script.scenes.reduce((total, scene) => total + scene.duration, 0);
 
 // Background music for the whole video, with a fade in and out
-const Music: React.FC<{ src: string; volume: number; fade: boolean }> = ({ src, volume, fade }) => {
+const Music: React.FC<{ src: string; volume: number; fade: boolean }> = ({
+  src,
+  volume,
+  fade,
+}) => {
   const { durationInFrames } = useVideoConfig();
   if (!fade) return <Audio src={staticFile(src)} volume={volume} />;
   return (
     <Audio
       src={staticFile(src)}
       volume={(f: number) =>
-        interpolate(f, [0, 15, durationInFrames - 30, durationInFrames], [0, volume, volume, 0], {
-          extrapolateLeft: "clamp",
-          extrapolateRight: "clamp",
-        })
+        interpolate(
+          f,
+          [0, 15, durationInFrames - 30, durationInFrames],
+          [0, volume, volume, 0],
+          {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+          },
+        )
       }
     />
   );
 };
 
-export const VideoFromScript: React.FC<{ script: VideoScript }> = ({ script }) => (
+export const VideoFromScript: React.FC<{ script: VideoScript }> = ({
+  script,
+}) => (
   <AbsoluteFill style={{ fontFamily, background: script.brand.colors.bg }}>
     <Series>
       {script.scenes.map((scene, i) => (
-        <Series.Sequence key={i} durationInFrames={scene.duration} name={`${i + 1}. ${scene.type}`}>
-          <AbsoluteFill style={{ fontFamily: scene.font ? fonts[scene.font] : undefined }}>
+        <Series.Sequence
+          key={i}
+          durationInFrames={scene.duration}
+          name={`${i + 1}. ${scene.type}`}
+        >
+          <AbsoluteFill
+            style={{ fontFamily: scene.font ? fonts[scene.font] : undefined }}
+          >
             {renderScene(scene, script.brand)}
           </AbsoluteFill>
           {/* this scene's sounds; `at` counts from the start of the scene */}
@@ -111,6 +135,13 @@ export const VideoFromScript: React.FC<{ script: VideoScript }> = ({ script }) =
         </Series.Sequence>
       ))}
     </Series>
-    {script.music ? <Music src={script.music.src} volume={script.music.volume ?? 0.6} fade={script.music.fade ?? true} /> : null}
+    {script.caption ? <CaptionOverlay caption={script.caption} /> : null}
+    {script.music ? (
+      <Music
+        src={script.music.src}
+        volume={script.music.volume ?? 0.6}
+        fade={script.music.fade ?? true}
+      />
+    ) : null}
   </AbsoluteFill>
 );
