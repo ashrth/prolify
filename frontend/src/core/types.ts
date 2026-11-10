@@ -1,5 +1,7 @@
 import type { FontName } from "./fonts";
 import type { PolaroidSceneData } from "./polaroid/types";
+import type {CompositeScene as CompData} from "./composite/types";  
+
 
 // ─────────────────────────────────────────────────────────────
 // Core types. A video is just: a brand + a list of scenes.
@@ -436,6 +438,7 @@ export type Scene = (
   | DreamScene
   | DialogueScene
   | PolaroidSceneData
+  | CompData
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 /** A line of text that stays on screen over the whole video (or a part of it). */

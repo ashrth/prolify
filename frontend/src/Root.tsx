@@ -3,14 +3,15 @@ import { Composition, Folder } from "remotion";
 import { PresetGallery } from "./core/PresetGallery";
 import { getScriptDuration, VideoFromScript } from "./core/VideoFromScript";
 import { x657oLaunch } from "./products/x657o/videos/launch";
-import { aotBW, aotColor } from "./products/aot/edit";
-import { dreamEdit } from "./products/dream/edit";
-import { gymEdit } from "./products/gym/edit";
+import { aotBW, aotColor } from "./gym/aot/edit";
+import { dreamEdit } from "./artist/dream/edit";
+import { gymEdit } from "./gym/gym/edit";
 import { x657oAscii } from "./products/x657o/videos/ascii";
 import { x657oAsciiEdit } from "./products/x657o/videos/ascii-edit";
 import { x657oGoPro } from "./products/x657o/videos/go-pro";
 import { x657oMotionBlur } from "./products/x657o/videos/motion-blur";
 import { x657oPolaroid } from "./products/x657o/videos/polaroid";
+import { shouldersOk } from "./gym/shoulders/ok";
 
 const FPS = 30;
 
@@ -92,6 +93,17 @@ export const RemotionRoot: React.FC = () => (
         height={1080}
         defaultProps={{ script: gymEdit }}
       />
+      <Folder name="shoulders">
+        <Composition
+          id="shoulders-ok"
+          component={VideoFromScript}
+          durationInFrames={getScriptDuration(shouldersOk)}
+          fps={FPS}
+          width={1445}
+          height={1080}
+          defaultProps={{ script: shouldersOk }}
+        />
+      </Folder>
     </Folder>
 
     <Folder name="dream">
