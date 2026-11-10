@@ -26,7 +26,7 @@ export const x657oPolaroid: VideoScript = {
       kicker: "new on x657o",
       flashAt: 12,
       sounds: [
-        { src: sfx("impact"), at: 12 }, // swap for a camera shutter sound if you have one
+        { src: sfx("shutter"), at: 12 }, // swap for a camera shutter sound if you have one
         { src: sfx("pop"), at: 26, volume: 0.8 },
         ...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => ({ src: sfx("tick"), at: 34 + Math.round(i * 1.5), volume: 0.35 })),
       ],

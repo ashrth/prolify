@@ -71,6 +71,15 @@ export const RemotionRoot: React.FC = () => (
         height={1920}
         defaultProps={{ script: x657oAsciiEdit }}
       />
+      <Composition
+        id="x657o-polaroid"
+        component={VideoFromScript}
+        durationInFrames={getScriptDuration(x657oPolaroid)}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ script: x657oPolaroid }}
+      />
     </Folder>
 
     <Folder name="gym">
@@ -119,7 +128,14 @@ export const RemotionRoot: React.FC = () => (
     </Folder>
 
     <Folder name="core">
-      <Composition id="preset-gallery" component={PresetGallery} durationInFrames={120} fps={FPS} width={1920} height={1080} />
+      <Composition
+        id="preset-gallery"
+        component={PresetGallery}
+        durationInFrames={120}
+        fps={FPS}
+        width={1920}
+        height={1080}
+      />
     </Folder>
   </>
 );
