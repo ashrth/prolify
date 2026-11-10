@@ -1,4 +1,5 @@
 import type { FontName } from "./fonts";
+import type { PolaroidSceneData } from "./polaroid/types";
 
 // ─────────────────────────────────────────────────────────────
 // Core types. A video is just: a brand + a list of scenes.
@@ -434,6 +435,7 @@ export type Scene = (
   | TextBehindScene
   | DreamScene
   | DialogueScene
+  | PolaroidSceneData
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 /** A line of text that stays on screen over the whole video (or a part of it). */
@@ -455,4 +457,3 @@ export type VideoScript = {
   music?: { src: string; volume?: number; fade?: boolean }; // fade: soft start and end (default true)
   caption?: Caption; // optional caption that appears over the whole video
 };
-

@@ -30,6 +30,7 @@ import { SwapHookScene } from "./scenes/SwapHookScene";
 import { TextBehindScene } from "./scenes/TextBehindScene";
 import type { Brand, Scene, VideoScript } from "./types";
 import { CaptionOverlay } from "./components/CaptionOverlay";
+import { PolaroidSceneView } from "./polaroid/PolaroidScene";
 
 // Add a new scene type: create it in scenes/, add its type to types.ts, add a case here.
 const renderScene = (scene: Scene, brand: Brand) => {
@@ -74,6 +75,8 @@ const renderScene = (scene: Scene, brand: Brand) => {
       return <DreamScene data={scene} />;
     case "dialogue":
       return <DialogueScene data={scene} />;
+    case "polaroid":
+      return <PolaroidSceneView data={scene} brand={brand} />;
   }
 };
 

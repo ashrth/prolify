@@ -10,6 +10,7 @@ import { x657oAscii } from "./products/x657o/videos/ascii";
 import { x657oAsciiEdit } from "./products/x657o/videos/ascii-edit";
 import { x657oGoPro } from "./products/x657o/videos/go-pro";
 import { x657oMotionBlur } from "./products/x657o/videos/motion-blur";
+import { x657oPolaroid } from "./products/x657o/videos/polaroid";
 
 const FPS = 30;
 
