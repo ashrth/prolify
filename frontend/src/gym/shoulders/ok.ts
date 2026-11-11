@@ -109,8 +109,24 @@ const shots: CompShot[] = [
     ],
   },
   // 1.73 — she stays in place, the gym behind her swaps
-  { frames: 11, layers: [plate.gym(3.2), her(2.4)] },
-  { frames: 10, layers: [plate.wall(3.0), her(2.77)] },
+  {
+    frames: 11,
+    layers: [
+      { kind: "clip", clip: "facepulls", at: 4.5, zoom: 1.2, drift: 0.05 },
+    ],
+  },
+  {
+    frames: 10,
+    layers: [
+      {
+        kind: "clip",
+        clip: "overhead",
+        at: 1.5,
+        position: "20% 50%",
+        zoom: 1.3,
+      },
+    ],
+  },
   // 2.43 — negative flash, spinning blur, a blurry detail, black
   {
     frames: 1,
@@ -162,16 +178,14 @@ const shots: CompShot[] = [
   {
     frames: 12,
     layers: [
-      plate.racks(2.0),
+      {
+        kind: "clip",
+        clip: "overhead",
+        at: 6.0,
+        position: "20% 50%",
+        zoom: 1.3,
+      },
       OK,
-      her(3.38),
-      her(3.38, {
-        mirror: true,
-        scale: 0.8,
-        x: -22,
-        appear: 8,
-        white: [8, 10],
-      }),
     ],
   },
   // 5.40 — wide, from behind
