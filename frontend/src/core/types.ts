@@ -1,6 +1,6 @@
 import type { FontName } from "./fonts";
 import type { PolaroidSceneData } from "./polaroid/types";
-import type {CompositeScene as CompData} from "./composite/types";  
+import type { CompositeScene } from "./composite/types";
 
 
 // ─────────────────────────────────────────────────────────────
@@ -438,7 +438,7 @@ export type Scene = (
   | DreamScene
   | DialogueScene
   | PolaroidSceneData
-  | CompData
+  | CompositeScene
 ) & { sounds?: SceneSound[]; font?: FontName };
 
 /** A line of text that stays on screen over the whole video (or a part of it). */

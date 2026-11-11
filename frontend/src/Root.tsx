@@ -99,7 +99,7 @@ export const RemotionRoot: React.FC = () => (
           component={VideoFromScript}
           durationInFrames={getScriptDuration(shouldersOk)}
           fps={FPS}
-          width={1445}
+          width={1440}
           height={1080}
           defaultProps={{ script: shouldersOk }}
         />

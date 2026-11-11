@@ -9,17 +9,17 @@ import type { VideoScript } from "../../core/types";
 // Cut to the reference frame by frame (30 frames = 1s). The cuts land on the track's hits.
 
 const clips: Record<string, CompClip> = {
-  opening: { src: "gym/shoulders/media/opening.mp4" },
-  broll: { src: "gym/shoulders/media/b-roll3.mp4" },
-  shrugs: { src: "gym/shoulders/media/shrugs-20kgs.mp4" },
-  overhead: { src: "gym/shoulders/media/overhead.mp4" },
-  facepulls: { src: "gym/shoulders/media/face-pulls.mov" },
+  opening: { src: "gym/shoulders/opening.mp4" },
+  broll: { src: "gym/shoulders/b-roll3.mp4" },
+  shrugs: { src: "gym/shoulders/shrugs-20kgs.mp4" },
+  overhead: { src: "gym/shoulders/overhead.mp4" },
+  facepulls: { src: "gym/shoulders/face-pulls.mov" },
 };
 
 // Her cutout, made from opening.mp4 between 2.4s and 3.8s (see setup). Fill in count after making it.
 const cutouts: Record<string, CompCutout> = {
   her: {
-    folder: "gym/shoulders/media/her-cutout",
+    folder: "gym/shoulders/her-cutout",
     start: 2.4,
     fps: 30,
     count: 42,
@@ -209,7 +209,7 @@ export const shouldersOk: VideoScript = {
       chrome: ["#555", "#eee", "#888", "#ddd"],
     },
   },
-  music: { src: "shoulders/media/track.mp3", volume: 1, fade: false },
+  music: { src: "gym/shoulders/track.mp3", volume: 1, fade: false },
   scenes: [
     {
       type: "composite",
