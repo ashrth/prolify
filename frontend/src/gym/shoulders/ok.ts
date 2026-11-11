@@ -8,12 +8,20 @@ import type { VideoScript } from "../../core/types";
 
 // Cut to the reference frame by frame (30 frames = 1s). The cuts land on the track's hits.
 
+// const clips: Record<string, CompClip> = {
+//   opening: { src: "gym/shoulders/opening.mp4" },
+//   broll: { src: "gym/shoulders/b-roll3.mp4" },
+//   shrugs: { src: "gym/shoulders/shrugs-20kgs.mp4" },
+//   overhead: { src: "gym/shoulders/overhead.mp4" },
+//   facepulls: { src: "gym/shoulders/face-pulls.mov" },
+// };
+
 const clips: Record<string, CompClip> = {
-  opening: { src: "gym/shoulders/opening.mp4" },
-  broll: { src: "gym/shoulders/b-roll3.mp4" },
+  opening: { src: "gym/shoulders/flexing.mov" },
+  broll: { src: "gym/shoulders/b-roll2.mov" },
   shrugs: { src: "gym/shoulders/shrugs-20kgs.mp4" },
   overhead: { src: "gym/shoulders/overhead.mp4" },
-  facepulls: { src: "gym/shoulders/face-pulls.mov" },
+  raises: { src: "gym/shoulders/raises-standing.mp4" },
 };
 
 // Her cutout, made from opening.mp4 between 2.4s and 3.8s (see setup). Fill in count after making it.
@@ -40,7 +48,7 @@ const plate = {
   }),
   gym: (at: number): CompLayer => ({
     kind: "clip",
-    clip: "facepulls",
+    clip: "raises",
     at,
     position: "0% 50%",
     zoom: 1.4,
@@ -90,7 +98,16 @@ const shots: CompShot[] = [
     flash: "white",
     layers: [
       plate.wall(2.0),
-      her(2.6, { scale: 0.5, x: 20, y: -4 }),
+      {
+        kind: "clip",
+        clip: "opening",
+        at: 4.5,
+        zoom: 1.0,
+        drift: 0.05,
+        position: "10% 50%",
+        opacity: 0.7,
+      },
+      // her(2.6, { scale: 0.5, x: 20, y: -4 }),
       { kind: "scribble", text: "shoulder day", x: 12, y: 16, until: 3 },
     ],
   },
@@ -111,9 +128,7 @@ const shots: CompShot[] = [
   // 1.73 — she stays in place, the gym behind her swaps
   {
     frames: 11,
-    layers: [
-      { kind: "clip", clip: "facepulls", at: 4.5, zoom: 1.2, drift: 0.05 },
-    ],
+    layers: [{ kind: "clip", clip: "raises", at: 4.5, zoom: 1.2, drift: 0.05 }],
   },
   {
     frames: 10,
@@ -136,7 +151,7 @@ const shots: CompShot[] = [
   { frames: 11, layers: [{ kind: "clip", clip: "broll", at: 1.2, spin: 24 }] },
   {
     frames: 5,
-    layers: [{ kind: "clip", clip: "broll", at: 0.5, zoom: 2.4, soft: 6 }],
+    layers: [{ kind: "clip", clip: "broll", at: 1.7, zoom: 2.4, soft: 6 }],
   },
   { frames: 2, layers: [] },
   // 3.07 — double exposure
@@ -146,7 +161,7 @@ const shots: CompShot[] = [
       { kind: "clip", clip: "overhead", at: 3.0 },
       {
         kind: "clip",
-        clip: "facepulls",
+        clip: "raises",
         at: 9.0,
         blend: "screen",
         opacity: 0.55,
@@ -181,7 +196,7 @@ const shots: CompShot[] = [
       {
         kind: "clip",
         clip: "overhead",
-        at: 6.0,
+        at: 5.0,
         position: "20% 50%",
         zoom: 1.3,
       },
@@ -189,7 +204,7 @@ const shots: CompShot[] = [
     ],
   },
   // 5.40 — wide, from behind
-  { frames: 7, layers: [{ kind: "clip", clip: "facepulls", at: 9.6 }] },
+  { frames: 7, layers: [{ kind: "clip", clip: "raises", at: 9.6 }] },
   // 5.63 — spinning blur, then the last move, washing out
   {
     frames: 11,
@@ -198,12 +213,12 @@ const shots: CompShot[] = [
   {
     frames: 10,
     bright: [6, 10],
-    layers: [{ kind: "clip", clip: "facepulls", at: 10.4, drift: 0.06 }],
+    layers: [{ kind: "clip", clip: "raises", at: 4.4, drift: 0.06 }],
   },
   {
     frames: 6,
     whiteOut: 6,
-    layers: [{ kind: "clip", clip: "facepulls", at: 10.73, drift: 0.06 }],
+    layers: [{ kind: "clip", clip: "raises", at: 3.5, drift: 0.06 }],
   },
   // 6.53 — black while the music finishes
   { frames: 26, layers: [] },

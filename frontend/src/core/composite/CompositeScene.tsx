@@ -1,3 +1,10 @@
+import { zigzag } from "@remotion/effects/zigzag";
+import { starburst } from "@remotion/effects/starburst";
+import { burlap } from "@remotion/effects/burlap";
+import { dotGrid } from "@remotion/effects/dot-grid";
+import { lut } from "@remotion/effects/lut";
+import { pattern } from "@remotion/effects/pattern";
+import { tear } from "@remotion/effects/tear";
 import React from "react";
 import { AbsoluteFill, Img, interpolate, random, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { Video } from "@remotion/media";
@@ -87,7 +94,31 @@ const ClipLayer: React.FC<{ l: ClipL; shot: CompShot; data: CompData }> = ({ l, 
       trimBefore={Math.round(l.at * fps)}
       playbackRate={l.rate ?? 1}
       muted
-      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: position, transform: `scale(${zoom})`, transformOrigin: position }}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        objectPosition: position,
+        transform: `scale(${zoom})`,
+        transformOrigin: position,
+        opacity: 0.76
+      }}
+      effects={[tear({
+        disabled: true
+      }), pattern({
+        disabled: true
+      }), lut({
+        content: "TITLE \"Teal and orange\"\nLUT_3D_SIZE 2\n\n0.02 0.05 0.08\n0.95 0.12 0.06\n0.02 0.8 0.4\n1 0.9 0.18\n0.08 0.18 0.9\n0.95 0.2 0.75\n0.15 0.88 0.92\n1 0.92 0.78",
+        disabled: true
+      }), dotGrid({
+        disabled: true
+      }), burlap({
+        disabled: true
+      }), starburst({
+        rays: 16,
+        colors: ["#ff6600", "#ffff00"],
+        disabled: true
+      }), zigzag({})]}
     />
   );
   const wrap: React.CSSProperties = {
