@@ -3,6 +3,12 @@ import { disciplineTemplate } from "./template";
 // The original DISCIPLINE edit (back day). Paths are in /public.
 // If you tweaked the original (filters, cutout count…), copy those values here.
 export const disciplineBack = disciplineTemplate({
+  theme: {
+  blackAndWhite: false,
+  colorBoost: false,
+  bw: { exposure: 0, contrast: 1.2, brightness: 1 },
+  boost: { amount: 1.8, exposure: 0, contrast: 1.1, brightness: 1 },
+},
   word: "DISCIPLINE",
   music: "gym/track.mp3",
   hero: { src: "gym/flex.mp4", at: 11.0, scale: 1.3, shiftX: 10, cutout: { folder: "gym/flex-cutout", count: 102 } },

@@ -1,5 +1,5 @@
 import type { FootageClip, Shot, VideoScript } from "../../core/types";
-
+import { themeFilter, type Themes } from "../theme";
 // ─────────────────────────────────────────────────────────────
 // DISCIPLINE template: the layout, timing and music sync live here.
 // Don't edit this to make a new version; make a new content file instead (see back.ts).
@@ -9,6 +9,7 @@ import type { FootageClip, Shot, VideoScript } from "../../core/types";
 export type Move = FootageClip & { moments: number[] };
 
 export type DisciplineContent = {
+  theme?: Themes;
   word: string; // the big word in the opening
   music: string; // path in /public
   hero: FootageClip & {
@@ -25,12 +26,20 @@ export type DisciplineContent = {
 type Slot = { role: number | "flex"; n: number };
 
 // The 22 shots after the drop, timed to the track's hits. Frames: 30 = 1s.
-const LAYOUT: (Slot & Omit<Shot, "clip" | "at" | "split"> & { split?: Slot })[] = [
+const LAYOUT: (Slot &
+  Omit<Shot, "clip" | "at" | "split"> & { split?: Slot })[] = [
   { role: 3, n: 0, frames: 11, white: [0, 2] },
   { role: 0, n: 0, frames: 22, punch: true },
   { role: 1, n: 0, frames: 11 },
   { role: 2, n: 0, frames: 10 },
-  { role: 4, n: 0, frames: 22, punch: true, enter: "diagonal", split: { role: 1, n: 5 } },
+  {
+    role: 4,
+    n: 0,
+    frames: 22,
+    punch: true,
+    enter: "diagonal",
+    split: { role: 1, n: 5 },
+  },
   { role: "flex", n: 0, frames: 22, push: true },
   { role: 3, n: 1, frames: 11, punch: true },
   { role: 4, n: 1, frames: 22 },
@@ -53,10 +62,17 @@ const LAYOUT: (Slot & Omit<Shot, "clip" | "at" | "split"> & { split?: Slot })[] 
 const INTRO = 101; // frames of the opening, until the drop
 
 export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
-  // every clip gets a key the scenes can refer to
-  const clips: Record<string, FootageClip> = { hero: c.hero, flex: c.flex };
-  c.moves.forEach((m, i) => (clips[`move${i}`] = m));
-
+  // the theme becomes a filter on every clip (added after any filter a clip already has)
+  const look = themeFilter(c.theme);
+  const themed = (clip: FootageClip): FootageClip => ({
+    ...clip,
+    filter: `${clip.filter ?? ""} ${look}`.trim() || undefined,
+  });
+  const clips: Record<string, FootageClip> = {
+    hero: themed(c.hero),
+    flex: themed(c.flex),
+  };
+  c.moves.forEach((m, i) => (clips[`move${i}`] = themed(m)));
   const key = (s: Slot) => (s.role === "flex" ? "flex" : `move${s.role}`);
   const at = (s: Slot) => {
     const list = s.role === "flex" ? c.flex.moments : c.moves[s.role].moments;
@@ -82,7 +98,14 @@ export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
       name: "gym",
       logo: "",
       url: "",
-      colors: { bg: "#000000", panel: "#000000", text: "#FFFFFF", textMuted: "rgba(255,255,255,0.6)", accent: "#E8261A", chrome: ["#555", "#eee", "#888", "#ddd"] },
+      colors: {
+        bg: "#000000",
+        panel: "#000000",
+        text: "#FFFFFF",
+        textMuted: "rgba(255,255,255,0.6)",
+        accent: "#E8261A",
+        chrome: ["#555", "#eee", "#888", "#ddd"],
+      },
     },
     music: { src: c.music, volume: 1, fade: false },
     scenes: [
@@ -90,18 +113,34 @@ export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
         type: "text-behind",
         duration: INTRO,
         clips,
-        base: { clip: "hero", at: c.hero.at, scale: c.hero.scale ?? 1.3, shiftX: c.hero.shiftX ?? 10 },
+        base: {
+          clip: "hero",
+          at: c.hero.at,
+          scale: c.hero.scale ?? 1.3,
+          shiftX: c.hero.shiftX ?? 10,
+        },
         text: c.word,
         color: "#E8261A",
         textSize: 300,
-        band: { centerY: 0.55, openAt: 16, heights: [190, 330], growAt: 58, hideAt: 88 },
+        band: {
+          centerY: 0.55,
+          openAt: 16,
+          heights: [190, 330],
+          growAt: 58,
+          hideAt: 88,
+        },
         flashFrom: 36,
         flashEvery: 3,
         flashes,
         silhouetteAt: 95,
         ...(c.hero.cutout ? { cutout: c.hero.cutout } : {}),
       },
-      { type: "footage-cuts", duration: shots.reduce((t, s) => t + s.frames, 0), clips, shots },
+      {
+        type: "footage-cuts",
+        duration: shots.reduce((t, s) => t + s.frames, 0),
+        clips,
+        shots,
+      },
     ],
   };
 };

@@ -3,6 +3,12 @@ import { disciplineTemplate } from "./template";
 // Leg day: same layout and music, new clips. Fill in your files and the seconds you like.
 // Find good seconds with a contact sheet (see the guide), and make the hero cutout with tools/cutout.sh.
 export const disciplineLegs = disciplineTemplate({
+  theme: {
+    blackAndWhite: false,
+    colorBoost: false,
+    bw: { exposure: 0, contrast: 1.2, brightness: 1 },
+    boost: { amount: 1.8, exposure: 0, contrast: 1.1, brightness: 1 },
+  },
   word: "DISCIPLINE",
   music: "gym/track.mp3", // same track; point to another file to change it
   hero: {
