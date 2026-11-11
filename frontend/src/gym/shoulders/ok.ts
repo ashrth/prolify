@@ -209,7 +209,7 @@ export const shouldersOk: VideoScript = {
       chrome: ["#555", "#eee", "#888", "#ddd"],
     },
   },
-  music: { src: "shoulders/track.mp3", volume: 1, fade: false },
+  music: { src: "shoulders/media/track.mp3", volume: 1, fade: false },
   scenes: [
     {
       type: "composite",
