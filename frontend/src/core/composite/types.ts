@@ -1,7 +1,6 @@
 // A layered edit: every shot is a stack of layers (clips, a cutout of the person, big text, a circle, a scribble).
 // Everything for it lives in this folder.
 
-
 export type CompClip = { src: string };
 
 /** PNG frames of the person with no background (made with rembg). */
@@ -71,4 +70,5 @@ export type CompositeScene = {
   cutouts?: Record<string, CompCutout>;
   shots: CompShot[];
   mono?: boolean; // black and white
+  film?: { grain?: number; vignette?: number; haze?: number; lift?: number };
 };

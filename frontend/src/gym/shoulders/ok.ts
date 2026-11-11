@@ -22,6 +22,7 @@ const clips: Record<string, CompClip> = {
   shrugs: { src: "gym/shoulders/shrugs-20kgs.mp4" },
   overhead: { src: "gym/shoulders/overhead.mp4" },
   raises: { src: "gym/shoulders/raises-standing.mp4" },
+  broll2: { src: "gym/shoulders/b-roll3.mp4" },
 };
 
 // Her cutout, made from opening.mp4 between 2.4s and 3.8s (see setup). Fill in count after making it.
@@ -78,7 +79,7 @@ const OK: CompLayer = {
   text: "OK",
   size: 0.75,
   spacing: "0.35em",
-  x: 10,
+  x: 1,
   opacity: 0.32,
 }; // x: 10 centers it on her
 
@@ -221,7 +222,7 @@ const shots: CompShot[] = [
     layers: [{ kind: "clip", clip: "raises", at: 3.5, drift: 0.06 }],
   },
   // 6.53 — black while the music finishes
-  { frames: 26, layers: [] },
+  { frames: 26, layers: [{ kind: "clip", clip: "broll2", at: 1.2 }] },
 ];
 
 export const shouldersOk: VideoScript = {
@@ -247,6 +248,7 @@ export const shouldersOk: VideoScript = {
       cutouts,
       shots,
       mono: true,
+      film: { grain: 0 },
     },
   ],
 };
