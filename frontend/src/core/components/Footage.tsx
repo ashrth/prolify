@@ -8,6 +8,7 @@ import {
 } from "remotion";
 import { Video } from "@remotion/media";
 import type { FootageClip } from "../types";
+import { asset } from "../asset";
 
 /** The dark, desaturated look of the reference. Applied to every clip. */
 export const GRADE = "contrast(1.15) saturate(0.7) brightness(0.88)";
@@ -31,7 +32,7 @@ export const ClipVideo: React.FC<{
   return (
     <AbsoluteFill style={{ overflow: "hidden", ...style }}>
       <Video
-        src={staticFile(c.src)}
+        src={asset(c.src)}
         trimBefore={Math.round(at * fps)}
         muted
         style={{

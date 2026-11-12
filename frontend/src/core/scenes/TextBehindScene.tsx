@@ -6,7 +6,6 @@ import {
   interpolate,
   prefetch,
   Sequence,
-  staticFile,
   getRemotionEnvironment,
   useCurrentFrame,
   useVideoConfig,
@@ -14,6 +13,7 @@ import {
 import { ClipVideo, FilmLook } from "../components/Footage";
 import { fonts } from "../fonts";
 import { clamp } from "../layout";
+import { asset } from "../asset";
 
 import type { TextBehindScene as TextBehindData } from "../types";
 
@@ -39,7 +39,7 @@ export const TextBehindScene: React.FC<{ data: TextBehindData }> = ({
     if (!data.cutout || getRemotionEnvironment().isRendering) return; // preview only
     const { folder, count } = data.cutout;
     const loads = Array.from({ length: count }, (_, i) =>
-      prefetch(staticFile(`${folder}/${String(i + 1).padStart(4, "0")}.png`)),
+      prefetch(asset(`${folder}/${String(i + 1).padStart(4, "0")}.png`)),
     );
     return () => loads.forEach((l) => l.free());
   }, [data.cutout]);
@@ -69,7 +69,7 @@ export const TextBehindScene: React.FC<{ data: TextBehindData }> = ({
     transformOrigin: "50% 50%",
   };
   const cutoutSrc = data.cutout
-    ? staticFile(
+    ? asset(
         `${data.cutout.folder}/${String(cutoutFrame + 1).padStart(4, "0")}.png`,
       )
     : null;

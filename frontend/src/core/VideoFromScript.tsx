@@ -3,7 +3,6 @@ import {
   AbsoluteFill,
   interpolate,
   Series,
-  staticFile,
   useVideoConfig,
 } from "remotion";
 import { Audio } from "@remotion/media";
@@ -32,7 +31,7 @@ import type { Brand, Scene, VideoScript } from "./types";
 import { CaptionOverlay } from "./components/CaptionOverlay";
 import { PolaroidSceneView } from "./polaroid/PolaroidScene";
 import { CompositeSceneView } from "./composite/CompositeScene";
-
+import { asset } from "./asset";
 
 // Add a new scene type: create it in scenes/, add its type to types.ts, add a case here.
 const renderScene = (scene: Scene, brand: Brand) => {
@@ -94,10 +93,10 @@ const Music: React.FC<{ src: string; volume: number; fade: boolean }> = ({
   fade,
 }) => {
   const { durationInFrames } = useVideoConfig();
-  if (!fade) return <Audio src={staticFile(src)} volume={volume} />;
+  if (!fade) return <Audio src={asset(src)} volume={volume} />;
   return (
     <Audio
-      src={staticFile(src)}
+      src={asset(src)}
       volume={(f: number) =>
         interpolate(
           f,
@@ -135,7 +134,7 @@ export const VideoFromScript: React.FC<{ script: VideoScript }> = ({
               key={j}
               from={s.at ?? 0}
               durationInFrames={s.duration}
-              src={staticFile(s.src)}
+              src={asset(s.src)}
               volume={s.volume ?? 1}
             />
           ))}
