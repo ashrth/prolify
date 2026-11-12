@@ -12,8 +12,12 @@ import { x657oGoPro } from "./products/x657o/videos/go-pro";
 import { x657oMotionBlur } from "./products/x657o/videos/motion-blur";
 import { x657oPolaroid } from "./products/x657o/videos/polaroid";
 import { shouldersOk } from "./gym/shoulders/ok";
-import { disciplineBack } from "./gym/discipline/back";
-import { disciplineLegs } from "./gym/discipline/legs";
+import back from "./gym/discipline/projects/back.json";
+import { Discipline } from "./gym/discipline/Discipline";
+import {
+  disciplineDuration,
+  type DisciplineContent,
+} from "./gym/discipline/template";
 
 const FPS = 30;
 
@@ -114,22 +118,13 @@ export const RemotionRoot: React.FC = () => (
         defaultProps={{ script: aotColor }}
       />
       <Composition
-        id="discipline-back"
-        component={VideoFromScript}
-        durationInFrames={getScriptDuration(disciplineBack)}
+        id="discipline"
+        component={Discipline}
+        durationInFrames={disciplineDuration}
         fps={FPS}
         width={1920}
         height={1080}
-        defaultProps={{ script: disciplineBack }}
-      />
-      <Composition
-        id="discipline-legs"
-        component={VideoFromScript}
-        durationInFrames={getScriptDuration(disciplineLegs)}
-        fps={FPS}
-        width={1920}
-        height={1080}
-        defaultProps={{ script: disciplineLegs }}
+        defaultProps={{ content: back as DisciplineContent }}
       />
 
       <Composition

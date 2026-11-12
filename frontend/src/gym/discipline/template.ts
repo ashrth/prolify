@@ -60,6 +60,8 @@ const LAYOUT: (Slot &
 ];
 
 const INTRO = 101; // frames of the opening, until the drop
+/** Total length in frames. Fixed by the layout, the same for every version. */
+export const disciplineDuration = INTRO + LAYOUT.reduce((t, s) => t + s.frames, 0);
 
 export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
   // the theme becomes a filter on every clip (added after any filter a clip already has)
