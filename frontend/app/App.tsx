@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { api, type TemplateInfo } from "./api";
+import { editors } from "./editors";
 
 // The categories on the home screen
 const CATEGORIES = [
@@ -80,6 +81,7 @@ export const App: React.FC = () => {
   if (category && template && project)
     return (
       <ProjectScreen
+        key={`${template}/${project}`}
         category={category}
         template={template}
         project={project}
@@ -219,11 +221,79 @@ const ProjectScreen: React.FC<{
   template: string;
   project: string;
   info?: TemplateInfo;
-}> = ({ category, template, project, info }) => (
-  <Shell back={() => go(category, template)}>
-    <h1>{project}</h1>
-    <p className="muted">
-      {info?.label ?? template} · next part: drop your clips into the slots here
-    </p>
-  </Shell>
-);
+}> = ({ category, template, project, info }) => {
+  const def = editors[template];
+  const [content, setContent] = useState<unknown>(null);
+  const [saved, setSaved] = useState(true);
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    if (!def) return;
+    api
+      .project(template, project)
+      .then(setContent)
+      .catch(() => {
+        setContent(def.defaults()); // a new video: start from the template's empty slots
+        setSaved(false);
+      });
+  }, [template, project]);
+
+  if (!def)
+    return (
+      <Shell back={() => go(category, template)}>
+        <h1>{project}</h1>
+        <p className="muted">this template doesn't have an editor yet</p>
+      </Shell>
+    );
+  if (!content)
+    return (
+      <Shell back={() => go(category, template)}>
+        <p className="muted">loading…</p>
+      </Shell>
+    );
+
+  const missing = def.missing(content);
+  const save = async () => {
+    setStatus("saving…");
+    try {
+      await api.save(template, project, content);
+      setSaved(true);
+      setStatus("saved");
+    } catch (e) {
+      setStatus(String(e));
+    }
+  };
+
+  return (
+    <Shell back={() => go(category, template)}>
+      <div className="project-head">
+        <div>
+          <h1>{project}</h1>
+          <p className="muted">
+            {info?.label ?? template}
+            {info?.ratio ? ` · ${info.ratio}` : ""}
+          </p>
+        </div>
+        <div className="row small-gap">
+          <span className="muted small">
+            {saved ? status : "unsaved changes"}
+          </span>
+          <button className="primary" onClick={save} disabled={saved}>
+            save
+          </button>
+        </div>
+      </div>
+      {missing.length ? (
+        <p className="warn small">still missing: {missing.join(", ")}</p>
+      ) : null}
+      <def.Editor
+        content={content}
+        onChange={(c) => {
+          setContent(c);
+          setSaved(false);
+        }}
+        upload={(file) => api.upload(template, project, file)}
+      />
+    </Shell>
+  );
+};

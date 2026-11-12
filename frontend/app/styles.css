@@ -143,3 +143,147 @@ button {
 .list-item:hover {
   border-color: rgba(255, 255, 255, 0.35);
 }
+
+/* ── project page ── */
+.project-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+.project-head h1 {
+  margin-bottom: 4px;
+}
+.editor {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.slot {
+  background: #121219;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.slot-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.slot-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.small {
+  font-size: 14px;
+}
+.warn {
+  color: #ffb347;
+}
+.drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 140px;
+  border: 2px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  padding: 12px;
+}
+.drop.over {
+  border-color: #fff;
+  color: #fff;
+}
+.player {
+  width: 100%;
+  max-height: 260px;
+  border-radius: 12px;
+  background: #000;
+}
+.moments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #1f1f29;
+  overflow: hidden;
+}
+.chip.bad {
+  background: #5a1d1d;
+}
+.chip button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+.chip-x {
+  padding-left: 0 !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+.small-gap {
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.secondary {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #1a1a22;
+  color: inherit;
+  cursor: pointer;
+  font-size: 14px;
+}
+.secondary:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.pill {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #1a1a22;
+  color: inherit;
+  cursor: pointer;
+}
+.pill.on {
+  background: #fff;
+  color: #08080c;
+  border-color: #fff;
+}
+.sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.slider {
+  display: grid;
+  grid-template-columns: 110px 1fr 48px;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+}
+.slider .value {
+  text-align: right;
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+.slider input {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+}
