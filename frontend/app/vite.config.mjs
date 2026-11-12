@@ -13,9 +13,9 @@ export default defineConfig({
     port: 5180,
     // anything under these addresses goes to your server on port 4000
     proxy: {
-      "/api": "http://localhost:4000",
-      "/media": "http://localhost:4000",
-      "/out": "http://localhost:4000",
+      "/api/": "http://localhost:4000",
+      "/media/": "http://localhost:4000",
+      "/out/": "http://localhost:4000",
     },
   },
 });
