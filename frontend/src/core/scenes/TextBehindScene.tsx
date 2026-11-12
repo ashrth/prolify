@@ -45,15 +45,33 @@ export const TextBehindScene: React.FC<{ data: TextBehindData }> = ({
   }, [data.cutout]);
 
   const [h1, h2] = band.heights;
+  const smooth = Easing.inOut(Easing.cubic);
   const bandH =
-    interpolate(frame, [band.openAt, band.openAt + 14], [0, h1], {
-      ...clamp,
-      easing: ease,
-    }) +
-    interpolate(frame, [band.growAt, band.growAt + 14], [0, h2 - h1], {
-      ...clamp,
-      easing: ease,
-    });
+    band.fullAt !== undefined
+      ? // smooth mode: one continuous opening, like the reference
+        interpolate(
+          frame,
+          [band.openAt, band.fullAt],
+          [0, (band.full ?? 0.88) * 1080],
+          { ...clamp, easing: smooth },
+        )
+      : interpolate(frame, [band.openAt, band.openAt + 14], [0, h1], {
+          ...clamp,
+          easing: ease,
+        }) +
+        interpolate(frame, [band.growAt, band.growAt + 14], [0, h2 - h1], {
+          ...clamp,
+          easing: ease,
+        });
+  // the word grows taller with the band; its width stays the same
+  const stretch = data.stretch
+    ? interpolate(
+        frame,
+        [band.openAt, band.fullAt ?? band.growAt + 14],
+        data.stretch,
+        { ...clamp, easing: smooth },
+      )
+    : 1;
   const showBand = frame >= band.openAt && frame < band.hideAt;
   const bandTop = band.centerY * height - (bandH * u) / 2;
 
@@ -124,7 +142,7 @@ export const TextBehindScene: React.FC<{ data: TextBehindData }> = ({
               left: 0,
               right: 0,
               top: "50%",
-              transform: "translateY(-50%)",
+              transform: `translateY(-50%) scaleY(${stretch})`,
               textAlign: "center",
               fontFamily: fonts.anton,
               fontSize: data.textSize * u,

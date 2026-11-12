@@ -61,7 +61,8 @@ const LAYOUT: (Slot &
 
 const INTRO = 101; // frames of the opening, until the drop
 /** Total length in frames. Fixed by the layout, the same for every version. */
-export const disciplineDuration = INTRO + LAYOUT.reduce((t, s) => t + s.frames, 0);
+export const disciplineDuration =
+  INTRO + LAYOUT.reduce((t, s) => t + s.frames, 0);
 
 export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
   // the theme becomes a filter on every clip (added after any filter a clip already has)
@@ -125,12 +126,15 @@ export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
         color: "#E8261A",
         textSize: 300,
         band: {
-          centerY: 0.55,
+          centerY: 0.5,
           openAt: 16,
           heights: [190, 330],
           growAt: 58,
           hideAt: 88,
+          fullAt: 86,
+          full: 0.88,
         },
+        stretch: [0.15, 2.4],
         flashFrom: 36,
         flashEvery: 3,
         flashes,

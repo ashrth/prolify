@@ -2,7 +2,6 @@ import type { FontName } from "./fonts";
 import type { PolaroidSceneData } from "./polaroid/types";
 import type { CompositeScene } from "./composite/types";
 
-
 // ─────────────────────────────────────────────────────────────
 // Core types. A video is just: a brand + a list of scenes.
 // Every scene has a `type` (which component renders it) and a
@@ -226,7 +225,12 @@ export type TextBehindScene = {
     heights: [number, number]; // band height after opening, and after growing (px at 1080p)
     growAt: number; // frame it starts growing to the second height
     hideAt: number; // frame the band and text disappear
+    fullAt?: number; // smooth mode: the band grows in one ease from openAt to fullAt…
+    full?: number; // …to this fraction of the frame's height (e.g. 0.88)
   };
+
+  stretch?: [number, number]; // the word's vertical stretch while the band opens, e.g. [0.15, 2.4]
+
   textSize: number; // px at 1080p
   flashes: { clip: string; at: number }[]; // clips flashing inside the band
   flashFrom: number;
