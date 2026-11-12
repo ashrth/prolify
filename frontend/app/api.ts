@@ -1,3 +1,5 @@
+import type { Motion } from "./components/pick";
+
 export type TemplateInfo = {
   composition: string;
   category: string;
@@ -27,6 +29,17 @@ export const api = {
     if (!res.ok) throw new Error(`save failed (${res.status})`);
   },
 
+  /** How much movement there is through a clip (the server measures it once, then remembers). */
+  analyze: async (src: string): Promise<Motion> => {
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ src }),
+    });
+    if (!res.ok) throw new Error(`analysis failed (${res.status})`);
+    return res.json();
+  },
+  
   /** Makes a cutout of `seconds` of a clip from `at` on the server, waits for it (a few minutes). */
   cutout: async (
     template: string,

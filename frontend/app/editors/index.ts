@@ -4,6 +4,7 @@ import {
   disciplineDefaults,
   disciplineMissing,
 } from "./discipline";
+import type { Motion } from "../components/pick";
 
 /** What the app gives every editor: uploading clips and making cutouts. */
 export type EditorTools = {
@@ -13,6 +14,7 @@ export type EditorTools = {
     at: number,
     seconds: number,
   ) => Promise<{ folder: string; count: number }>;
+  analyze: (src: string) => Promise<Motion>;
 };
 
 /** Each template's editor in the app. Add a template here when it's ready. */

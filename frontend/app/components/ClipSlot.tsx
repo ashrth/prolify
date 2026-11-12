@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { playable } from "../api";
+import { evenPick, smartPick, type Motion } from "./pick";
 
 type Props = {
   title: string;
@@ -9,22 +10,14 @@ type Props = {
   min: number; // moments needed (fewer is allowed for workout clips: they cycle)
   max: number;
   needs: number; // seconds of clip each moment uses
+  pick?: number; // how many moments auto-pick chooses (default: min)
+  mode?: "action" | "calm"; // what auto-pick looks for
   onChange: (v: { src: string; moments: number[] }) => void;
   upload: (file: File) => Promise<string>;
+  analyze?: (src: string) => Promise<Motion>;
 };
 
 const round = (t: number) => Math.round(t * 10) / 10;
-
-/** Evenly spread `count` moments between 0.2s and the last usable second. */
-export const autoPick = (duration: number, count: number, needs: number) => {
-  const last = Math.max(0, duration - needs - 0.05);
-  if (count <= 1) return [round(Math.min(0.2, last))];
-  return Array.from({ length: count }, (_, i) =>
-    round(
-      Math.min(0.2, last) + ((last - Math.min(0.2, last)) * i) / (count - 1),
-    ),
-  );
-};
 
 /** One slot: drop a clip, scrub it, mark the moments to use. */
 export const ClipSlot: React.FC<Props> = ({
@@ -35,8 +28,11 @@ export const ClipSlot: React.FC<Props> = ({
   min,
   max,
   needs,
+  pick,
+  mode = "action",
   onChange,
   upload,
+  analyze,
 }) => {
   const video = useRef<HTMLVideoElement>(null);
   const [duration, setDuration] = useState(0);
@@ -44,6 +40,7 @@ export const ClipSlot: React.FC<Props> = ({
   const [busy, setBusy] = useState("");
   const [over, setOver] = useState(false);
   const single = max === 1;
+  const count = single ? 1 : (pick ?? min);
 
   const take = async (file?: File | null) => {
     if (!file) return;
@@ -53,6 +50,22 @@ export const ClipSlot: React.FC<Props> = ({
       onChange({ src: url, moments: [] }); // moments get picked once the clip's length is known
     } catch (e) {
       alert(String(e));
+    }
+    setBusy("");
+  };
+
+  /** Ask the server where the movement is, and pick from it (even spread if that fails). */
+  const autoPick = async (clip: string, d: number) => {
+    if (!analyze)
+      return onChange({ src: clip, moments: evenPick(d, count, needs) });
+    setBusy("finding the best moments…");
+    try {
+      onChange({
+        src: clip,
+        moments: smartPick(await analyze(clip), count, needs, mode),
+      });
+    } catch {
+      onChange({ src: clip, moments: evenPick(d, count, needs) });
     }
     setBusy("");
   };
@@ -114,11 +127,7 @@ export const ClipSlot: React.FC<Props> = ({
             onLoadedMetadata={(e) => {
               const d = e.currentTarget.duration;
               setDuration(d);
-              if (!moments.length)
-                onChange({
-                  src,
-                  moments: autoPick(d, single ? 1 : min, needs),
-                });
+              if (!moments.length) autoPick(src, d); // a fresh clip: pick moments right away
             }}
             onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
           />
@@ -174,12 +183,11 @@ export const ClipSlot: React.FC<Props> = ({
                 ? `start here (${time.toFixed(1)}s)`
                 : `add moment here (${time.toFixed(1)}s)`}
             </button>
-            {!single && duration ? (
+            {duration ? (
               <button
                 className="secondary"
-                onClick={() =>
-                  onChange({ src, moments: autoPick(duration, min, needs) })
-                }
+                onClick={() => autoPick(src, duration)}
+                disabled={!!busy}
               >
                 auto-pick
               </button>

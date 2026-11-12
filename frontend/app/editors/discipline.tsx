@@ -5,17 +5,28 @@ import { ThemePanel } from "../components/ThemePanel";
 import type { EditorTools } from "./index";
 
 // What each workout clip is used for in the layout (from template.ts)
+// `uses`: how many shots use the clip, so auto-pick gives each shot its own moment
 const MOVES = [
-  { title: "workout clip 1", help: "used 3 times, including a big hit" },
-  { title: "workout clip 2", help: "used most (6 times): your best clip" },
-  { title: "workout clip 3", help: "used 3 times, one with a whip" },
+  {
+    title: "workout clip 1",
+    help: "used 3 times, including a big hit",
+    uses: 3,
+  },
+  {
+    title: "workout clip 2",
+    help: "used most (6 times): your best clip",
+    uses: 6,
+  },
+  { title: "workout clip 3", help: "used 3 times, one with a whip", uses: 3 },
   {
     title: "workout clip 4",
     help: "opens the cuts with a white flash; backlit or dark clips look great",
+    uses: 3,
   },
   {
     title: "workout clip 5",
     help: "split screen, slices and letterbox: b-roll or wide shots work well",
+    uses: 4,
   },
 ];
 const HERO_SECONDS = 3.4; // how much of the hero clip the opening uses
@@ -114,6 +125,8 @@ export const DisciplineEditor: React.FC<{
       min={1}
       max={1}
       needs={HERO_SECONDS}
+      mode="calm"
+      analyze={tools.analyze}
       upload={tools.upload}
       onChange={({ src, moments }) => {
         const changed = src !== c.hero.src || moments[0] !== c.hero.at;
@@ -140,6 +153,7 @@ export const DisciplineEditor: React.FC<{
       max={4}
       needs={1.3}
       upload={tools.upload}
+      analyze={tools.analyze}
       onChange={({ src, moments }) => {
         const m = [0, 1, 2, 3].map(
           (i) => moments[i] ?? moments[moments.length - 1] ?? 0,
@@ -158,6 +172,8 @@ export const DisciplineEditor: React.FC<{
         min={3}
         max={6}
         needs={1.2}
+        pick={MOVES[i].uses}
+        analyze={tools.analyze}
         upload={tools.upload}
         onChange={({ src, moments }) => {
           const moves = [...c.moves] as DisciplineContent["moves"];

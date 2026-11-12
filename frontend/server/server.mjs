@@ -235,4 +235,48 @@ app.get("/api/cutout/:id", (req, res) =>
   res.json(cutoutJobs.get(req.params.id) ?? { status: "unknown" }),
 );
 
+// ── analyze: how much movement there is through a clip, 10 times a second ──
+const motionCache = new Map();
+
+app.post("/api/analyze", (req, res) => {
+  const input = fileOnDisk(String(req.body?.src ?? ""));
+  if (!fs.existsSync(input))
+    return res.status(404).json({ error: `clip not found: ${input}` });
+  if (motionCache.has(input)) return res.json(motionCache.get(input));
+
+  const W = 32,
+    H = 18,
+    RATE = 10; // a tiny gray version is enough to measure movement
+  const ff = spawn("ffmpeg", [
+    "-v",
+    "error",
+    "-i",
+    input,
+    "-vf",
+    `fps=${RATE},scale=${W}:${H},format=gray`,
+    "-f",
+    "rawvideo",
+    "-",
+  ]);
+  const chunks = [];
+  ff.stdout.on("data", (d) => chunks.push(d));
+  ff.on("close", (code) => {
+    if (code !== 0)
+      return res.status(500).json({ error: "ffmpeg couldn't read the clip" });
+    const buf = Buffer.concat(chunks);
+    const size = W * H;
+    const frames = Math.floor(buf.length / size);
+    const motion = [0];
+    for (let i = 1; i < frames; i++) {
+      let sum = 0;
+      for (let j = 0; j < size; j++)
+        sum += Math.abs(buf[i * size + j] - buf[(i - 1) * size + j]);
+      motion.push(sum / size); // average change from the previous picture
+    }
+    const result = { step: 1 / RATE, duration: frames / RATE, motion };
+    motionCache.set(input, result);
+    res.json(result);
+  });
+});
+
 app.listen(PORT, () => console.log(`Prolify server running on ${BASE}`));

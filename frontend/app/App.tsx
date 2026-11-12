@@ -317,6 +317,7 @@ const ProjectScreen: React.FC<{
           upload: (file) => api.upload(template, project, file),
           cutout: (src, at, seconds) =>
             api.cutout(template, project, src, at, seconds),
+          analyze: (src) => api.analyze(src),
         }}
       />
     </Shell>
