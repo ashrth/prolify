@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
+import { spawn } from "node:child_process";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const MEDIA = path.join(ROOT, "media");
@@ -157,8 +158,6 @@ app.get("/api/render/:id", (req, res) =>
   res.json(jobs.get(req.params.id) ?? { status: "unknown" }),
 );
 
-app.listen(PORT, () => console.log(`Prolify server running on ${BASE}`));
-
 // ── open in Studio: copy a project into the file the Studio shows ──
 app.post("/api/studio/:template/:project", (req, res) => {
   const file = projectFile(req.params.template, req.params.project);
@@ -176,3 +175,64 @@ app.post("/api/studio/:template/:project", (req, res) => {
       TEMPLATES[req.params.template]?.composition ?? req.params.template,
   });
 });
+
+// ── cutouts: runs tools/cutout.sh (ffmpeg + rembg) on part of a clip ──
+const cutoutJobs = new Map();
+
+// where a clip actually is on disk: an uploaded clip (server address) or a /public path
+const fileOnDisk = (src) =>
+  src.startsWith(`${BASE}/media/`)
+    ? path.join(MEDIA, decodeURIComponent(src.slice(`${BASE}/media/`.length)))
+    : path.join(ROOT, "public", src);
+
+app.post("/api/cutout/:template/:project", (req, res) => {
+  const { template, project } = req.params;
+  const { src, at, seconds } = req.body ?? {};
+  const input = fileOnDisk(String(src ?? ""));
+  if (!fs.existsSync(input))
+    return res.status(404).json({ error: `clip not found: ${input}` });
+
+  const name = `cutout-${Number(at).toFixed(1).replace(".", "_")}s`; // a new start point gets its own folder
+  const dir = path.join(MEDIA, safe(template), safe(project), name);
+  fs.rmSync(dir, { recursive: true, force: true }); // remaking replaces the old one
+  const id = `${safe(template)}-${safe(project)}-cutout-${Date.now()}`;
+  cutoutJobs.set(id, { status: "working" });
+  res.json({ id });
+
+  const job = spawn("bash", [
+    path.join(ROOT, "tools/cutout.sh"),
+    input,
+    String(at),
+    String(seconds),
+    dir,
+  ]);
+  let log = "";
+  job.stdout.on("data", (d) => (log += d));
+  job.stderr.on("data", (d) => (log += d));
+  job.on("close", (code) => {
+    const count = fs.existsSync(dir)
+      ? fs.readdirSync(dir).filter((f) => f.endsWith(".png")).length
+      : 0;
+    if (code === 0 && count > 0) {
+      cutoutJobs.set(id, {
+        status: "done",
+        folder: `${BASE}/media/${safe(template)}/${safe(project)}/${name}`,
+        count,
+      });
+      console.log(`cutout done: ${count} frames in ${dir}`);
+    } else {
+      console.error(log);
+      cutoutJobs.set(id, {
+        status: "error",
+        error:
+          log.trim().split("\n").slice(-3).join(" ") || `exited with ${code}`,
+      });
+    }
+  });
+});
+
+app.get("/api/cutout/:id", (req, res) =>
+  res.json(cutoutJobs.get(req.params.id) ?? { status: "unknown" }),
+);
+
+app.listen(PORT, () => console.log(`Prolify server running on ${BASE}`));
