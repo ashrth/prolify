@@ -134,6 +134,7 @@ app.post("/api/render/:template/:project", async (req, res) => {
       serveUrl,
       id: t.composition,
       inputProps,
+      chromiumOptions: { gl: "angle" },
     });
     fs.mkdirSync(OUT, { recursive: true });
     await renderMedia({
@@ -142,6 +143,7 @@ app.post("/api/render/:template/:project", async (req, res) => {
       codec: "h264",
       outputLocation: output,
       inputProps,
+      chromiumOptions: { gl: "angle" },
       concurrency: 2,
       onProgress: ({ progress }) =>
         jobs.set(id, { status: "rendering", progress }),

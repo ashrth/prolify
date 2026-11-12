@@ -9,7 +9,9 @@ import {
   random,
   staticFile,
   useCurrentFrame,
-  useVideoConfig, interpolateColors, interpolate,
+  useVideoConfig,
+  interpolateColors,
+  interpolate,
 } from "remotion";
 import { Video } from "@remotion/media";
 import type { FootageClip } from "../types";
@@ -27,7 +29,8 @@ export const ClipVideo: React.FC<{
   clip: string;
   at: number;
   style?: React.CSSProperties;
-}> = ({ clips, clip, at, style }) => {
+  effects?: any[];
+}> = ({ clips, clip, at, style, effects }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const c = clips[clip];
@@ -41,6 +44,7 @@ export const ClipVideo: React.FC<{
         src={asset(c.src)}
         trimBefore={Math.round(at * fps)}
         muted
+        effects={effects}
         style={{
           width: "100%",
           height: "100%",
@@ -49,19 +53,6 @@ export const ClipVideo: React.FC<{
           transform: `scale(${c.zoom ?? 1})`,
           filter: `${GRADE} ${c.filter ?? ""}`,
         }}
-        effects={[exposure({
-          stops: -2
-        }), contrast({}), colorCorrection({
-          disabled: true
-        }), colorKey({
-          similarity: 0.45,
-          disabled: true
-        }), duotone({
-          lightColor: "rgba(221, 56, 56, 1)",
-          darkColor: "#2d2a2a",
-          threshold: 0.12,
-          disabled: true
-        })]}
       />
     </AbsoluteFill>
   );

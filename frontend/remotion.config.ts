@@ -12,3 +12,4 @@ Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
 Config.setDefaultPremountInSeconds(2);
 Config.setPublicLicenseKey('free-license');
+Config.setChromiumOpenGlRenderer("angle");

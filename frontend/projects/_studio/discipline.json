@@ -14,6 +14,20 @@
       "brightness": 1
     }
   },
+  "look": {
+    "exposure": -2,
+    "contrast": 1.1
+  },
+  "effects": [
+    {
+      "type": "duotone",
+      "from": 103,
+      "to": 109,
+      "darkColor": "#140014",
+      "lightColor": "#ff2d55",
+      "threshold": 0.45
+    }
+  ],
   "word": "CONSISTENCY",
   "music": "gym/track.mp3",
   "hero": {
@@ -26,56 +40,28 @@
   },
   "flex": {
     "src": "http://localhost:4000/media/discipline/triceps/flexing.mov",
-    "moments": [
-      0.1,
-      1.2,
-      2.1,
-      3.6
-    ]
+    "moments": [0.1, 1.2, 2.1, 3.6]
   },
   "moves": [
     {
       "src": "http://localhost:4000/media/discipline/triceps/arnold_s.mp4",
-      "moments": [
-        0.1,
-        0.8,
-        0.9,
-        1.7
-      ]
+      "moments": [0.1, 0.8, 0.9, 1.7]
     },
     {
       "src": "http://localhost:4000/media/discipline/triceps/arnold_s-more-weight.mov",
-      "moments": [
-        0.4,
-        1.2,
-        2,
-        3.2,
-        4.1,
-        5
-      ]
+      "moments": [0.4, 1.2, 2, 3.2, 4.1, 5]
     },
     {
       "src": "http://localhost:4000/media/discipline/triceps/cable2.mp4",
-      "moments": [
-        0.1,
-        1.8,
-        3.8
-      ]
+      "moments": [0.1, 1.8, 3.8]
     },
     {
       "src": "http://localhost:4000/media/discipline/triceps/arnold_s.mp4",
-      "moments": [
-        0.1,
-        0.9,
-        1.7
-      ]
+      "moments": [0.1, 0.9, 1.7]
     },
     {
       "src": "http://localhost:4000/media/discipline/triceps/b-roll2.mov",
-      "moments": [
-        0.1,
-        0.9
-      ]
+      "moments": [0.1, 0.9]
     }
   ]
 }

@@ -266,7 +266,7 @@ const ProjectScreen: React.FC<{
     }
   };
   const openInStudio = async () => {
-    if (!(await save())) return; // the Studio shows the saved version
+    if (!saved && !(await save())) return; // save only changes made in the app, so edits made in the JSON file aren't overwritten
     try {
       const composition = await api.studio(template, project);
       window.open(`http://localhost:3000/${composition}`, "prolify-studio"); // reuses the same tab each time

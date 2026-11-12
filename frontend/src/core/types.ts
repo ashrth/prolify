@@ -203,6 +203,8 @@ export type Shot = {
   white?: [number, number]; // frames (inside the shot) shown as a white high-contrast flash
   glitch?: [number, number]; // frames of strobe + streak glitch
   blurOut?: number; // last N frames blur and fade to black
+  fx?: ColorFx; // color adjustments for this shot
+  timed?: { from: number; to: number; effect: any }[]; // effects that are only on between two frames of the shot
 };
 
 export type FootageCutsScene = {

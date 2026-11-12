@@ -1,5 +1,7 @@
 import type { FootageClip, Shot, VideoScript } from "../../core/types";
 import { themeFilter, type Themes } from "../theme";
+import { applyProjectEffects, type TimedEffect } from "../../core/effects";
+import type { ColorFx } from "../../core/keyframes";
 // ─────────────────────────────────────────────────────────────
 // DISCIPLINE template: the layout, timing and music sync live here.
 // Don't edit this to make a new version; make a new content file instead (see back.ts).
@@ -10,6 +12,8 @@ export type Move = FootageClip & { moments: number[] };
 
 export type DisciplineContent = {
   theme?: Themes;
+  effects?: TimedEffect[]; // this video's own effects, by video frame: { type: "duotone", from: 103, to: 109, … }
+  look?: ColorFx; // a color adjustment applied to every clip in this video
   word: string; // the big word in the opening
   music: string; // path in /public
   hero: FootageClip & {
@@ -82,12 +86,18 @@ export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
     return list[s.n % list.length]; // fewer moments than needed? it cycles through the ones you gave
   };
 
-  const shots: Shot[] = LAYOUT.map(({ role, n, split, ...rest }) => ({
+  const layoutShots: Shot[] = LAYOUT.map(({ role, n, split, ...rest }) => ({
     ...rest,
     clip: key({ role, n }),
     at: at({ role, n }),
     ...(split ? { split: { clip: key(split), at: at(split) } } : {}),
   }));
+  // this video's own effects, placed onto the shots they cover (the cuts start right after the opening)
+  const shots = applyProjectEffects(layoutShots, c.effects, INTRO);
+  // the video's overall look goes on every shot (a shot's own fx wins where both set the same thing)
+  const finalShots = c.look
+    ? shots.map((s) => ({ ...s, fx: { ...c.look, ...s.fx } }))
+    : shots;
 
   // 17 flashes inside the opening band: cycle through the five moves
   const flashes = Array.from({ length: 17 }, (_, i) => {
@@ -143,9 +153,9 @@ export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
       },
       {
         type: "footage-cuts",
-        duration: shots.reduce((t, s) => t + s.frames, 0),
+        duration: finalShots.reduce((t, s) => t + s.frames, 0),
         clips,
-        shots,
+        shots: finalShots,
       },
     ],
   };
