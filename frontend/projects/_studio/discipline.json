@@ -15,9 +15,9 @@
     }
   },
   "look": {
-    "exposure": -2,
-    "contrast": 1.1
+    "exposure": -2
   },
+  "word": "CONSISTENCY",
   "effects": [
     {
       "type": "duotone",
@@ -28,7 +28,6 @@
       "threshold": 0.45
     }
   ],
-  "word": "CONSISTENCY",
   "music": "gym/track.mp3",
   "hero": {
     "src": "http://localhost:4000/media/discipline/triceps/cable.mp4",
@@ -36,7 +35,8 @@
     "cutout": {
       "folder": "http://localhost:4000/media/discipline/triceps/cutout-1_7s",
       "count": 102
-    }
+    },
+    "filter": "brightness(0.8)"
   },
   "flex": {
     "src": "http://localhost:4000/media/discipline/triceps/flexing.mov",
@@ -49,7 +49,7 @@
     },
     {
       "src": "http://localhost:4000/media/discipline/triceps/arnold_s-more-weight.mov",
-      "moments": [0.4, 1.2, 2, 3.2, 4.1, 5]
+      "moments": [1.2, 1.5, 2, 3.2, 4.1, 4.7]
     },
     {
       "src": "http://localhost:4000/media/discipline/triceps/cable2.mp4",
