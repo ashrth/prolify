@@ -18,7 +18,11 @@ const BASE = `http://localhost:${PORT}`;
 
 // The templates the app can make. Add one here when a template is ready.
 const TEMPLATES = {
-  discipline: { composition: "discipline", category: "gym", label: "discipline" },
+  discipline: {
+    composition: "discipline",
+    category: "gym",
+    label: "discipline",
+  },
 };
 
 const app = express();
@@ -36,7 +40,11 @@ app.get("/api/templates", (req, res) => res.json(TEMPLATES));
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      const dir = path.join(MEDIA, safe(req.params.template), safe(req.params.project));
+      const dir = path.join(
+        MEDIA,
+        safe(req.params.template),
+        safe(req.params.project),
+      );
       fs.mkdirSync(dir, { recursive: true });
       cb(null, dir);
     },
@@ -44,21 +52,35 @@ const upload = multer({
   }),
 });
 
-app.post("/api/projects/:template/:project/files", upload.array("files"), (req, res) => {
-  const { template, project } = req.params;
-  res.json({ files: req.files.map((f) => `${BASE}/media/${safe(template)}/${safe(project)}/${f.filename}`) });
-});
+app.post(
+  "/api/projects/:template/:project/files",
+  upload.array("files"),
+  (req, res) => {
+    const { template, project } = req.params;
+    res.json({
+      files: req.files.map(
+        (f) => `${BASE}/media/${safe(template)}/${safe(project)}/${f.filename}`,
+      ),
+    });
+  },
+);
 
 // ── projects: the content JSON that fills a template ────────
 app.get("/api/projects/:template", (req, res) => {
   const dir = path.join(PROJECTS, safe(req.params.template));
-  const list = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)) : [];
+  const list = fs.existsSync(dir)
+    ? fs
+        .readdirSync(dir)
+        .filter((f) => f.endsWith(".json"))
+        .map((f) => f.slice(0, -5))
+    : [];
   res.json(list);
 });
 
 app.get("/api/projects/:template/:project", (req, res) => {
   const file = projectFile(req.params.template, req.params.project);
-  if (!fs.existsSync(file)) return res.status(404).json({ error: "no such project" });
+  if (!fs.existsSync(file))
+    return res.status(404).json({ error: "no such project" });
   res.json(JSON.parse(fs.readFileSync(file, "utf8")));
 });
 
@@ -75,7 +97,10 @@ let bundling = null;
 const getBundle = (fresh) => {
   if (!bundling || fresh) {
     console.log("preparing the Remotion project…");
-    bundling = bundle({ entryPoint: path.join(ROOT, "src/index.ts"), rootDir: ROOT }).catch((e) => {
+    bundling = bundle({
+      entryPoint: path.join(ROOT, "src/index.ts"),
+      rootDir: ROOT,
+    }).catch((e) => {
       bundling = null;
       throw e;
     });
@@ -90,7 +115,8 @@ app.post("/api/render/:template/:project", async (req, res) => {
   const t = TEMPLATES[template];
   if (!t) return res.status(404).json({ error: "unknown template" });
   const file = projectFile(template, project);
-  if (!fs.existsSync(file)) return res.status(404).json({ error: "save the project first" });
+  if (!fs.existsSync(file))
+    return res.status(404).json({ error: "save the project first" });
 
   const content = JSON.parse(fs.readFileSync(file, "utf8"));
   const id = `${safe(template)}-${safe(project)}-${Date.now()}`;
@@ -101,7 +127,11 @@ app.post("/api/render/:template/:project", async (req, res) => {
   try {
     const serveUrl = await getBundle(req.query.fresh === "1"); // ?fresh=1 after you change template code
     const inputProps = { content };
-    const composition = await selectComposition({ serveUrl, id: t.composition, inputProps });
+    const composition = await selectComposition({
+      serveUrl,
+      id: t.composition,
+      inputProps,
+    });
     fs.mkdirSync(OUT, { recursive: true });
     await renderMedia({
       composition,
@@ -109,7 +139,9 @@ app.post("/api/render/:template/:project", async (req, res) => {
       codec: "h264",
       outputLocation: output,
       inputProps,
-      onProgress: ({ progress }) => jobs.set(id, { status: "rendering", progress }),
+      concurrency: 2,
+      onProgress: ({ progress }) =>
+        jobs.set(id, { status: "rendering", progress }),
     });
     jobs.set(id, { status: "done", progress: 1, url: `${BASE}/out/${id}.mp4` });
     console.log("done:", output);
@@ -119,6 +151,8 @@ app.post("/api/render/:template/:project", async (req, res) => {
   }
 });
 
-app.get("/api/render/:id", (req, res) => res.json(jobs.get(req.params.id) ?? { status: "unknown" }));
+app.get("/api/render/:id", (req, res) =>
+  res.json(jobs.get(req.params.id) ?? { status: "unknown" }),
+);
 
 app.listen(PORT, () => console.log(`Prolify server running on ${BASE}`));
