@@ -22,6 +22,8 @@ const TEMPLATES = {
     composition: "discipline",
     category: "gym",
     label: "discipline",
+    description: "the word behind the hero, 22 cuts on the beat, glitch ending",
+    ratio: "16:9",
   },
 };
 
