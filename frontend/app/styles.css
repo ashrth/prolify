@@ -287,3 +287,27 @@ button {
   max-width: none;
   padding: 0;
 }
+/* ── preview and render ── */
+.top {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .top {
+    grid-template-columns: 1fr;
+  }
+}
+.bar {
+  height: 8px;
+  border-radius: 999px;
+  background: #1f1f29;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: #fff;
+  transition: width 0.4s;
+}

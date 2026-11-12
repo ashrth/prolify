@@ -158,3 +158,21 @@ app.get("/api/render/:id", (req, res) =>
 );
 
 app.listen(PORT, () => console.log(`Prolify server running on ${BASE}`));
+
+// ── open in Studio: copy a project into the file the Studio shows ──
+app.post("/api/studio/:template/:project", (req, res) => {
+  const file = projectFile(req.params.template, req.params.project);
+  if (!fs.existsSync(file))
+    return res.status(404).json({ error: "save the project first" });
+  const target = path.join(
+    PROJECTS,
+    "_studio",
+    `${safe(req.params.template)}.json`,
+  );
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.copyFileSync(file, target);
+  res.json({
+    composition:
+      TEMPLATES[req.params.template]?.composition ?? req.params.template,
+  });
+});

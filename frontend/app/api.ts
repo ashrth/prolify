@@ -43,6 +43,15 @@ export const api = {
     const { files } = (await res.json()) as { files: string[] };
     return files[0];
   },
+
+  /** Puts this project into the Studio; returns the composition to open. */
+  studio: async (template: string, project: string): Promise<string> => {
+    const res = await fetch(`/api/studio/${template}/${project}`, {
+      method: "POST",
+    });
+    if (!res.ok) throw new Error(`couldn't open in Studio (${res.status})`);
+    return ((await res.json()) as { composition: string }).composition;
+  },
 };
 
 /** A path from a project (a /public path or a server address) as something the browser can load. */

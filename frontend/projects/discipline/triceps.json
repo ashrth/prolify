@@ -1,0 +1,54 @@
+{
+  "theme": {
+    "blackAndWhite": false,
+    "colorBoost": false,
+    "bw": {
+      "exposure": 0,
+      "contrast": 1.2,
+      "brightness": 1
+    },
+    "boost": {
+      "amount": 1.8,
+      "exposure": 0,
+      "contrast": 1.1,
+      "brightness": 1
+    }
+  },
+  "word": "DISCIPLINE",
+  "music": "gym/track.mp3",
+  "hero": {
+    "src": "",
+    "at": 0
+  },
+  "flex": {
+    "src": "",
+    "moments": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "moves": [
+    {
+      "src": "",
+      "moments": []
+    },
+    {
+      "src": "",
+      "moments": []
+    },
+    {
+      "src": "",
+      "moments": []
+    },
+    {
+      "src": "",
+      "moments": []
+    },
+    {
+      "src": "",
+      "moments": []
+    }
+  ]
+}

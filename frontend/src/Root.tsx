@@ -12,7 +12,7 @@ import { x657oGoPro } from "./products/x657o/videos/go-pro";
 import { x657oMotionBlur } from "./products/x657o/videos/motion-blur";
 import { x657oPolaroid } from "./products/x657o/videos/polaroid";
 import { shouldersOk } from "./gym/shoulders/ok";
-import back from "./gym/discipline/projects/back.json";
+import studioDiscipline from "../projects/_studio/discipline.json";
 import { Discipline } from "./gym/discipline/Discipline";
 import {
   disciplineDuration,
@@ -124,7 +124,7 @@ export const RemotionRoot: React.FC = () => (
         fps={FPS}
         width={1920}
         height={1080}
-        defaultProps={{ content: back as DisciplineContent }}
+        defaultProps={{ content: studioDiscipline as DisciplineContent }}
       />
 
       <Composition

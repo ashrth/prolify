@@ -259,6 +259,17 @@ const ProjectScreen: React.FC<{
       await api.save(template, project, content);
       setSaved(true);
       setStatus("saved");
+      return true;
+    } catch (e) {
+      setStatus(String(e));
+      return false;
+    }
+  };
+  const openInStudio = async () => {
+    if (!(await save())) return; // the Studio shows the saved version
+    try {
+      const composition = await api.studio(template, project);
+      window.open(`http://localhost:3000/${composition}`, "prolify-studio"); // reuses the same tab each time
     } catch (e) {
       setStatus(String(e));
     }
@@ -278,13 +289,23 @@ const ProjectScreen: React.FC<{
           <span className="muted small">
             {saved ? status : "unsaved changes"}
           </span>
+          <button
+            className="secondary"
+            onClick={openInStudio}
+            disabled={missing.length > 0}
+          >
+            open in Studio
+          </button>
           <button className="primary" onClick={save} disabled={saved}>
             save
           </button>
         </div>
       </div>
       {missing.length ? (
-        <p className="warn small">still missing: {missing.join(", ")}</p>
+        <p className="warn small">
+          still missing: {missing.join(", ")}. "open in Studio" works once every
+          slot has a clip.
+        </p>
       ) : null}
       <def.Editor
         content={content}
