@@ -1,3 +1,5 @@
+import { duotone } from "@remotion/effects/duotone";
+import { exposure } from "@remotion/effects/exposure";
 import React, { useEffect } from "react";
 import {
   AbsoluteFill,
@@ -162,6 +164,12 @@ export const TextBehindScene: React.FC<{ data: TextBehindData }> = ({
           <Img
             src={cutoutSrc}
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            effects={[exposure({
+              stops: -2
+            }), duotone({
+              lightColor: "#c90909",
+              disabled: true
+            })]}
           />
         </AbsoluteFill>
       ) : null}

@@ -14,73 +14,67 @@
       "brightness": 1
     }
   },
-  "word": "DISCIPLINE",
+  "word": "CONSISTENCY",
   "music": "gym/track.mp3",
   "hero": {
-    "src": "gym/flex.mp4",
-    "at": 11,
-    "scale": 1.3,
-    "shiftX": 10,
+    "src": "http://localhost:4000/media/discipline/triceps/cable.mp4",
+    "at": 1.7,
     "cutout": {
-      "folder": "gym/flex-cutout",
+      "folder": "http://localhost:4000/media/discipline/triceps/cutout-1_7s",
       "count": 102
     }
   },
   "flex": {
-    "src": "gym/flex.mp4",
+    "src": "http://localhost:4000/media/discipline/triceps/flexing.mov",
     "moments": [
-      1.4,
-      6.4,
-      11.8,
-      12.6
+      0.1,
+      1.2,
+      2.1,
+      3.6
     ]
   },
   "moves": [
     {
-      "src": "gym/lat_pull_down.mp4",
-      "zoom": 1.1,
+      "src": "http://localhost:4000/media/discipline/triceps/arnold_s.mp4",
       "moments": [
-        1,
-        3.6,
-        4.5
+        0.1,
+        0.8,
+        0.9,
+        1.7
       ]
     },
     {
-      "src": "gym/row.mp4",
+      "src": "http://localhost:4000/media/discipline/triceps/arnold_s-more-weight.mov",
       "moments": [
-        0.6,
+        0.4,
+        1.2,
         2,
-        1.5,
-        2.6,
-        4.3,
-        3
+        3.2,
+        4.1,
+        5
       ]
     },
     {
-      "src": "gym/seated_rowing.mp4",
-      "zoom": 1.1,
+      "src": "http://localhost:4000/media/discipline/triceps/cable2.mp4",
       "moments": [
-        0.7,
-        2.2,
-        4.4
+        0.1,
+        1.8,
+        3.8
       ]
     },
     {
-      "src": "gym/C0015.mov",
+      "src": "http://localhost:4000/media/discipline/triceps/arnold_s.mp4",
       "moments": [
-        0,
-        1.3,
-        1.6
+        0.1,
+        0.9,
+        1.7
       ]
     },
     {
-      "src": "gym/C0022.MP4",
-      "zoom": 1.1,
+      "src": "http://localhost:4000/media/discipline/triceps/b-roll2.mov",
       "moments": [
-        2.3,
-        0.2,
-        4,
-        0.6
+        0.1,
+        0.9
       ]
     }
   ]

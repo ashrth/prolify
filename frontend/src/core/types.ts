@@ -1,4 +1,5 @@
 import type { FontName } from "./fonts";
+import type { ColorFx } from "./keyframes";
 import type { PolaroidSceneData } from "./polaroid/types";
 import type { CompositeScene } from "./composite/types";
 

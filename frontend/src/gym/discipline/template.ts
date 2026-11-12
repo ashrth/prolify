@@ -123,7 +123,7 @@ export const disciplineTemplate = (c: DisciplineContent): VideoScript => {
           shiftX: c.hero.shiftX ?? 10,
         },
         text: c.word,
-        color: "#E8261A",
+        color: "#cf1e14ff",
         textSize: 300,
         band: {
           centerY: 0.5,

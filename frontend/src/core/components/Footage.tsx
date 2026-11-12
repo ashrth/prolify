@@ -1,10 +1,15 @@
+import { duotone } from "@remotion/effects/duotone";
+import { colorKey } from "@remotion/effects/color-key";
+import { colorCorrection } from "@remotion/effects/color-correction";
+import { contrast } from "@remotion/effects/contrast";
+import { exposure } from "@remotion/effects/exposure";
 import React from "react";
 import {
   AbsoluteFill,
   random,
   staticFile,
   useCurrentFrame,
-  useVideoConfig,
+  useVideoConfig, interpolateColors, interpolate,
 } from "remotion";
 import { Video } from "@remotion/media";
 import type { FootageClip } from "../types";
@@ -23,6 +28,7 @@ export const ClipVideo: React.FC<{
   at: number;
   style?: React.CSSProperties;
 }> = ({ clips, clip, at, style }) => {
+  const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const c = clips[clip];
   if (!c)
@@ -43,6 +49,19 @@ export const ClipVideo: React.FC<{
           transform: `scale(${c.zoom ?? 1})`,
           filter: `${GRADE} ${c.filter ?? ""}`,
         }}
+        effects={[exposure({
+          stops: -2
+        }), contrast({}), colorCorrection({
+          disabled: true
+        }), colorKey({
+          similarity: 0.45,
+          disabled: true
+        }), duotone({
+          lightColor: "rgba(221, 56, 56, 1)",
+          darkColor: "#2d2a2a",
+          threshold: 0.12,
+          disabled: true
+        })]}
       />
     </AbsoluteFill>
   );
