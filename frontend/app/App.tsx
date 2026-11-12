@@ -313,7 +313,11 @@ const ProjectScreen: React.FC<{
           setContent(c);
           setSaved(false);
         }}
-        upload={(file) => api.upload(template, project, file)}
+        tools={{
+          upload: (file) => api.upload(template, project, file),
+          cutout: (src, at, seconds) =>
+            api.cutout(template, project, src, at, seconds),
+        }}
       />
     </Shell>
   );

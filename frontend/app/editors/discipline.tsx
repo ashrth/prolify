@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import type { DisciplineContent } from "../../src/gym/discipline/template";
 import { ClipSlot } from "../components/ClipSlot";
 import { ThemePanel } from "../components/ThemePanel";
+import type { EditorTools } from "./index";
 
 // What each workout clip is used for in the layout (from template.ts)
 const MOVES = [
@@ -17,6 +18,53 @@ const MOVES = [
     help: "split screen, slices and letterbox: b-roll or wide shots work well",
   },
 ];
+const HERO_SECONDS = 3.4; // how much of the hero clip the opening uses
+
+/** The hero's cutout: status, and a button that makes it on the server. */
+const HeroCutout: React.FC<{
+  c: DisciplineContent;
+  onChange: (c: DisciplineContent) => void;
+  tools: EditorTools;
+}> = ({ c, onChange, tools }) => {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  if (!c.hero.src) return null;
+
+  const make = async () => {
+    setBusy(true);
+    setError("");
+    try {
+      const { src, at } = c.hero;
+      const cutout = await tools.cutout(src, at, HERO_SECONDS);
+      onChange({ ...c, hero: { ...c.hero, cutout } });
+    } catch (e) {
+      setError(String(e));
+    }
+    setBusy(false);
+  };
+
+  return (
+    <div className="row small-gap">
+      {c.hero.cutout ? (
+        <span className="muted small">
+          cutout ready ({c.hero.cutout.count} frames)
+        </span>
+      ) : (
+        <span className="warn small">
+          no cutout yet: the word will sit in front of her
+        </span>
+      )}
+      <button className="secondary" onClick={make} disabled={busy}>
+        {busy
+          ? "making cutout… (a few minutes)"
+          : c.hero.cutout
+            ? "remake cutout"
+            : "make cutout"}
+      </button>
+      {error ? <span className="warn small">{error}</span> : null}
+    </div>
+  );
+};
 
 export const disciplineDefaults = (): DisciplineContent => ({
   theme: {
@@ -47,8 +95,8 @@ export const disciplineMissing = (c: DisciplineContent) => {
 export const DisciplineEditor: React.FC<{
   content: DisciplineContent;
   onChange: (c: DisciplineContent) => void;
-  upload: (file: File) => Promise<string>;
-}> = ({ content: c, onChange, upload }) => (
+  tools: EditorTools;
+}> = ({ content: c, onChange, tools }) => (
   <div className="editor">
     <div className="slot">
       <div className="slot-title">word</div>
@@ -65,8 +113,8 @@ export const DisciplineEditor: React.FC<{
       moments={c.hero.src ? [c.hero.at] : []}
       min={1}
       max={1}
-      needs={3.4}
-      upload={upload}
+      needs={HERO_SECONDS}
+      upload={tools.upload}
       onChange={({ src, moments }) => {
         const changed = src !== c.hero.src || moments[0] !== c.hero.at;
         // a new clip or start point needs a new cutout
@@ -81,16 +129,7 @@ export const DisciplineEditor: React.FC<{
         });
       }}
     />
-    {c.hero.cutout ? (
-      <p className="muted small">
-        cutout: {c.hero.cutout.folder} ({c.hero.cutout.count} frames)
-      </p>
-    ) : c.hero.src ? (
-      <p className="warn small">
-        no cutout yet: the word will sit in front of her (cutout button comes in
-        step 4)
-      </p>
-    ) : null}
+    <HeroCutout c={c} onChange={onChange} tools={tools} />
 
     <ClipSlot
       title="flex"
@@ -100,7 +139,7 @@ export const DisciplineEditor: React.FC<{
       min={4}
       max={4}
       needs={1.3}
-      upload={upload}
+      upload={tools.upload}
       onChange={({ src, moments }) => {
         const m = [0, 1, 2, 3].map(
           (i) => moments[i] ?? moments[moments.length - 1] ?? 0,
@@ -119,7 +158,7 @@ export const DisciplineEditor: React.FC<{
         min={3}
         max={6}
         needs={1.2}
-        upload={upload}
+        upload={tools.upload}
         onChange={({ src, moments }) => {
           const moves = [...c.moves] as DisciplineContent["moves"];
           moves[i] = { ...moves[i], src, moments };

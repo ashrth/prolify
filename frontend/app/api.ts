@@ -27,6 +27,35 @@ export const api = {
     if (!res.ok) throw new Error(`save failed (${res.status})`);
   },
 
+  /** Makes a cutout of `seconds` of a clip from `at` on the server, waits for it (a few minutes). */
+  cutout: async (
+    template: string,
+    project: string,
+    src: string,
+    at: number,
+    seconds: number,
+  ) => {
+    const res = await fetch(`/api/cutout/${template}/${project}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ src, at, seconds }),
+    });
+    if (!res.ok) throw new Error(`cutout failed to start (${res.status})`);
+    const { id } = (await res.json()) as { id: string };
+    for (;;) {
+      await new Promise((r) => setTimeout(r, 2000));
+      const job = await get<{
+        status: string;
+        folder?: string;
+        count?: number;
+        error?: string;
+      }>(`/api/cutout/${id}`);
+      if (job.status === "done")
+        return { folder: job.folder!, count: job.count! };
+      if (job.status === "error") throw new Error(job.error ?? "cutout failed");
+    }
+  },
+
   /** Sends a clip to the server; returns its address. */
   upload: async (
     template: string,
