@@ -18,6 +18,8 @@ import {
   disciplineDuration,
   type DisciplineContent,
 } from "./gym/discipline/template";
+import { Mirror } from "./artist/mirror/Mirror";
+import { mirrorDuration, mirrorEdit } from "./artist/mirror/edit";
 
 const FPS = 30;
 
@@ -147,6 +149,15 @@ export const RemotionRoot: React.FC = () => (
         width={1080}
         height={1920}
         defaultProps={{ script: dreamEdit }}
+      />
+      <Composition
+        id="dream-mirror"
+        component={Mirror}
+        durationInFrames={mirrorDuration(mirrorEdit)}
+        fps={30}
+        width={1080}
+        height={1350}
+        defaultProps={{ content: mirrorEdit }}
       />
     </Folder>
 
